@@ -50,6 +50,10 @@ On release, maintainers move **`[Unreleased]`** content into a dated **`## [0.x.
 
 ### Changed
 
+- **Ops — github-workflows**: Pin **BehindTheMusicTree/github-workflows** reusables to **`@v2.0.0`** (**`sync-env-to-server`**, **`set-image-tags-on-server`**, **`call-redeployment-webhook`**).
+
+- **Ops — API release / Sync env**: **`api-release.yml`** preflight requires **`IMAGE_TAGS_POOL_DIR`** and calls **`set-image-tags-on-server`** (**`stack: tmd-admin`**, **`TMD_ADMIN_API_TAG`**) instead of **`REDEPLOYMENT_ROOT`** + **`set-image-tag-on-server`**. **Sync env** build jobs require **`ENV_POOL_DIR`** (same as infrastructure); reusable **`sync-env-to-server`** uploads only to the env pool—run **redeploy** to promote **`scripts/sync-env/`**.
+
 - **Ops — Sync env to server**: **`sync-env-to-server.yml`** no longer substitutes defaults for **`TMD_ADMIN_NODE_ENV`**, **`TMD_ADMIN_S3_REGION`**, **`TMD_ADMIN_API_DB_SUPERUSER`**, or **`TMD_ADMIN_API_DB_APP_USER`**. Each **STAGING** / **PROD** environment must define those variables; the build steps exit with an error if any required var or secret is missing. GitHub names for DB bootstrap credentials are **`TMD_ADMIN_API_DB_*`** (aligned with **`TMD_ADMIN_API_APP_NAME`**); rename from **`TMD_ADMIN_DB_SUPERUSER`** / **`TMD_ADMIN_DB_APP_USER`** and matching **`_PASSWORD`** secrets.
 
 - **Catalog / Prisma seed**: **`Card.rowKey`** is always slugified **`artist-title`** via **`catalogRowKey()`** in **`@repo/cards-domain`** (no `genre-` / `spotlight-` / `world-` / `blend-` / fixed La Macarena key / wishlist **`wl-`** prefixes). **`WishlistCardDef`** drops **`rowKey`**; seed and web wishlist derive it from **`artist`** + **`title`**. Existing DBs need a re-seed or rowKey migration; locally use **`pnpm --filter api db:reset`** or **`db:seed`**.
@@ -60,7 +64,7 @@ On release, maintainers move **`[Unreleased]`** content into a dated **`## [0.x.
 
 ### Added
 
-- **Ops — Sync env to server**: [`.github/workflows/sync-env-to-server.yml`](.github/workflows/sync-env-to-server.yml) (manual **workflow_dispatch**), same reusable workflow as [hear-the-music-tree-api](https://github.com/BehindTheMusicTree/hear-the-music-tree-api): builds API + Postgres fragments per **STAGING** / **PROD**, uploads **`/tmp/sync-env-<TMD_ADMIN_API_APP_NAME>-<env>.env`** and **`/tmp/sync-env-<TMD_ADMIN_API_APP_NAME><DB_APP_NAME_SUFFIX>-<env>.env`** (**`DB_APP_NAME_SUFFIX`** required GitHub Variable, same value as **BehindTheMusicTree/infrastructure**). API fragment includes **R2** **`S3_*`** (**`TMD_ADMIN_S3_ENDPOINT`** required; **`TMD_ADMIN_R2_ACCESS_KEY_ID`** / **`TMD_ADMIN_R2_SECRET_ACCESS_KEY`** secrets). Requires **`REDEPLOYMENT_ROOT`** = Music Deck admin redeploy tree (e.g. **`/var/webhook/redeployment-the-music-deck-admin`**). See **CONTRIBUTING**.
+- **Ops — Sync env to server**: [`.github/workflows/sync-env-to-server.yml`](.github/workflows/sync-env-to-server.yml) (manual **workflow_dispatch**), same reusable workflow as [hear-the-music-tree-api](https://github.com/BehindTheMusicTree/hear-the-music-tree-api): builds API + Postgres fragments per **STAGING** / **PROD**, uploads **`${ENV_POOL_DIR}/sync-env-<TMD_ADMIN_API_APP_NAME>-<env>.env`** and **`${ENV_POOL_DIR}/sync-env-<TMD_ADMIN_API_APP_NAME><DB_APP_NAME_SUFFIX>-<env>.env`** (**`ENV_POOL_DIR`** + **`DB_APP_NAME_SUFFIX`** required; align with **BehindTheMusicTree/infrastructure**). API fragment includes **R2** **`S3_*`** (**`TMD_ADMIN_S3_ENDPOINT`** required; **`TMD_ADMIN_R2_ACCESS_KEY_ID`** / **`TMD_ADMIN_R2_SECRET_ACCESS_KEY`** secrets). See **CONTRIBUTING**.
 
 - **API**: Jest + Supertest e2e coverage for `GET /health` (`apps/api`).
 

@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://gist.githubusercontent.com/sargunv/c2ca41a08391cd06feaad97aece309e4/raw/empty-json-schema.json
 # Sync Nest API + Postgres compose env fragments to the VPS (BehindTheMusicTree/github-workflows).
 # Pattern: build fragment per env → artifact → reusable sync-env-to-server.
-# Uploads /tmp/sync-env-<app>-<env>.env and merges keys into {REDEPLOYMENT_ROOT}-{env}/scripts/.env (reusable).
-# Infra redeploy promotes /tmp into scripts/sync-env/ then apply-tmd-admin-env-from-sync → compose/*.env.
+# Uploads ${ENV_POOL_DIR}/sync-env-<app>-<env>.env (atomic). Infra redeploy promotes pool → scripts/sync-env/
+# then apply-tmd-admin-env-from-sync → compose/*.env.
 # Postgres fragment basename: TMD_ADMIN_API_APP_NAME + DB_APP_NAME_SUFFIX (same GitHub Variable as infrastructure / hear-the-music-tree-api; required, no default).
 # Card artwork storage: Cloudflare R2 (S3 API). API fragment carries S3_* from GitHub vars/secrets; no third compose fragment on the server.
 # Nest PORT is set on the server from infrastructure only (TMD_ADMIN_API_LISTEN_PORT in scripts/.env); do not put PORT in this fragment.
@@ -31,7 +31,7 @@ jobs:
       - name: Validate vars and build API fragment
         env:
           SERVER_HOST: ${{ vars.SERVER_HOST }}
-          REDEPLOYMENT_ROOT: ${{ vars.REDEPLOYMENT_ROOT }}
+          ENV_POOL_DIR: ${{ vars.ENV_POOL_DIR }}
           TMD_ADMIN_API_APP_NAME: ${{ vars.TMD_ADMIN_API_APP_NAME }}
           DB_APP_NAME_SUFFIX: ${{ vars.DB_APP_NAME_SUFFIX }}
           TMD_ADMIN_NODE_ENV: ${{ vars.TMD_ADMIN_NODE_ENV }}
@@ -51,7 +51,7 @@ jobs:
             printf '%s\n' "CORS_ORIGINS=${TMD_ADMIN_CORS_ORIGINS}" >> fragment.env
           fi
           required=(
-            SERVER_HOST REDEPLOYMENT_ROOT TMD_ADMIN_API_APP_NAME DB_APP_NAME_SUFFIX
+            SERVER_HOST ENV_POOL_DIR TMD_ADMIN_API_APP_NAME DB_APP_NAME_SUFFIX
             SERVER_DEPLOY_USERNAME SERVER_DEPLOY_SSH_PRIVATE_KEY
             TMD_ADMIN_NODE_ENV TMD_ADMIN_S3_REGION
             TMD_ADMIN_S3_BUCKET TMD_ADMIN_S3_PUBLIC_BASE_URL TMD_ADMIN_S3_ENDPOINT
@@ -97,7 +97,7 @@ jobs:
       - name: Validate vars and build DB fragment
         env:
           SERVER_HOST: ${{ vars.SERVER_HOST }}
-          REDEPLOYMENT_ROOT: ${{ vars.REDEPLOYMENT_ROOT }}
+          ENV_POOL_DIR: ${{ vars.ENV_POOL_DIR }}
           TMD_ADMIN_API_APP_NAME: ${{ vars.TMD_ADMIN_API_APP_NAME }}
           DB_APP_NAME_SUFFIX: ${{ vars.DB_APP_NAME_SUFFIX }}
           TMD_ADMIN_API_DB_SUPERUSER: ${{ vars.TMD_ADMIN_API_DB_SUPERUSER }}
@@ -116,7 +116,7 @@ jobs:
           fi
           db_app_name="${api}${DB_APP_NAME_SUFFIX}"
           required=(
-            SERVER_HOST REDEPLOYMENT_ROOT TMD_ADMIN_API_APP_NAME DB_APP_NAME_SUFFIX
+            SERVER_HOST ENV_POOL_DIR TMD_ADMIN_API_APP_NAME DB_APP_NAME_SUFFIX
             SERVER_DEPLOY_USERNAME SERVER_DEPLOY_SSH_PRIVATE_KEY
             TMD_ADMIN_API_DB_SUPERUSER TMD_ADMIN_API_DB_APP_USER
             TMD_ADMIN_API_DB_SUPERUSER_PASSWORD TMD_ADMIN_API_DB_APP_USER_PASSWORD
@@ -149,7 +149,7 @@ jobs:
   sync-api-staging:
     name: Sync API env (staging)
     needs: [build-api-fragment]
-    uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@main
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@v2.0.0
     with:
       sync_env: staging
       fragment_artifact: sync-env-fragment-api-staging/fragment.env
@@ -159,7 +159,7 @@ jobs:
   sync-api-prod:
     name: Sync API env (prod)
     needs: [build-api-fragment]
-    uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@main
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@v2.0.0
     with:
       sync_env: prod
       fragment_artifact: sync-env-fragment-api-prod/fragment.env
@@ -169,7 +169,7 @@ jobs:
   sync-db-staging:
     name: Sync DB env (staging)
     needs: [build-db-fragment]
-    uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@main
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@v2.0.0
     with:
       sync_env: staging
       fragment_artifact: sync-env-fragment-db-staging/fragment.env
@@ -179,7 +179,7 @@ jobs:
   sync-db-prod:
     name: Sync DB env (prod)
     needs: [build-db-fragment]
-    uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@main
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@v2.0.0
     with:
       sync_env: prod
       fragment_artifact: sync-env-fragment-db-prod/fragment.env

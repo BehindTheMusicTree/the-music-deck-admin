@@ -100,38 +100,41 @@ jobs:
     needs: [determine-version]
     environment: ${{ needs.determine-version.outputs.deployment_environment }}
     steps:
-      - name: Require deploy and app-name vars (set-image-tag-on-server)
+      - name: Require deploy and app-name vars (set-image-tags-on-server)
         run: |
           missing=""
-          [ -z "${REDEPLOYMENT_ROOT}" ] && missing="${missing} REDEPLOYMENT_ROOT"
+          [ -z "${IMAGE_TAGS_POOL_DIR}" ] && missing="${missing} IMAGE_TAGS_POOL_DIR"
           [ -z "${TMD_ADMIN_API_APP_NAME}" ] && missing="${missing} TMD_ADMIN_API_APP_NAME"
           [ -z "${TMD_ADMIN_REDEPLOYMENT_HOOK_ID_BASE}" ] && missing="${missing} TMD_ADMIN_REDEPLOYMENT_HOOK_ID_BASE"
           if [ -n "$missing" ]; then
             echo "ERROR: Set org-level (or this repo) Variables:$missing"
-            echo "Example REDEPLOYMENT_ROOT=/var/webhook/redeployment-the-music-deck-admin (match BehindTheMusicTree/infrastructure)"
+            echo "Example IMAGE_TAGS_POOL_DIR=/srv/btmt/image-tags (same as BehindTheMusicTree/infrastructure)"
             echo "Example TMD_ADMIN_REDEPLOYMENT_HOOK_ID_BASE=the-music-deck-admin-redeploy (same value as infra; required so call-redeployment-webhook uses TMD_ADMIN_WEBHOOK_SECRET_*)"
             exit 1
           fi
         env:
-          REDEPLOYMENT_ROOT: ${{ vars.REDEPLOYMENT_ROOT }}
+          IMAGE_TAGS_POOL_DIR: ${{ vars.IMAGE_TAGS_POOL_DIR }}
           TMD_ADMIN_API_APP_NAME: ${{ vars.TMD_ADMIN_API_APP_NAME }}
           TMD_ADMIN_REDEPLOYMENT_HOOK_ID_BASE: ${{ vars.TMD_ADMIN_REDEPLOYMENT_HOOK_ID_BASE }}
 
   set-remote-api-tag:
-    name: Set API image tag on server
+    name: Set API image tags manifest on server
     needs: [build-api-image, determine-version, deploy-preflight]
-    uses: BehindTheMusicTree/github-workflows/.github/workflows/set-image-tag-on-server.yml@main
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/set-image-tags-on-server.yml@v2.0.0
     with:
       env: ${{ needs.determine-version.outputs.env }}
-      tag: ${{ needs.determine-version.outputs.image_tag }}
-      app_name: ${{ vars.TMD_ADMIN_API_APP_NAME }}
+      stack: tmd-admin
+      tags: |
+        TMD_ADMIN_API_TAG=${{ needs.determine-version.outputs.image_tag }}
+      release_id: ${{ needs.determine-version.outputs.app_version }}
+      release_sha: ${{ github.sha }}
     secrets: inherit
 
   trigger-redeploy:
     name: Trigger VPS redeploy webhook
     needs:
       [build-api-image, set-remote-api-tag, deploy-preflight, determine-version]
-    uses: BehindTheMusicTree/github-workflows/.github/workflows/call-redeployment-webhook.yml@v1.0.4
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/call-redeployment-webhook.yml@v2.0.0
     with:
       env: ${{ needs.determine-version.outputs.env }}
       hook_id_base: ${{ vars.TMD_ADMIN_REDEPLOYMENT_HOOK_ID_BASE }}
