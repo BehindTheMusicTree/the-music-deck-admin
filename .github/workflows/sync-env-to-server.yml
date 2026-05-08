@@ -4,9 +4,10 @@
 # Uploads ${ENV_POOL_DIR}/sync-env-<app>-<env>.env (atomic). Infra redeploy promotes pool → scripts/sync-env/
 # then apply-tmd-admin-env-from-sync → compose/*.env.
 # Postgres fragment basename: TMD_ADMIN_API_APP_NAME + DB_APP_NAME_SUFFIX (same GitHub Variable as infrastructure / hear-the-music-tree-api; required, no default).
-# Card artwork storage: Cloudflare R2 (S3 API). API fragment carries S3_* from GitHub vars/secrets; no third compose fragment on the server.
+# Card artwork storage: Cloudflare R2 (S3 API). API fragment carries S3_* from GitHub vars/secrets (except S3_BUCKET and S3_REGION, set by infrastructure); no third compose fragment on the server.
 # Nest PORT is set on the server from infrastructure only (TMD_ADMIN_API_LISTEN_PORT in scripts/.env); do not put PORT in this fragment.
 # DATABASE_URL (Prisma) is set by infrastructure only — not in this API fragment (same merge discipline as PORT).
+# Execution order: build staging → sync staging → build prod → sync prod.
 name: Sync env to server
 
 on:
@@ -16,17 +17,10 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  build-api-fragment:
-    name: Build API env fragment (${{ matrix.environment }})
+  build-api-fragment-staging:
+    name: Build API env fragment (staging)
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - environment: STAGING
-            sync_env: staging
-          - environment: PROD
-            sync_env: prod
-    environment: ${{ matrix.environment }}
+    environment: STAGING
     steps:
       - name: Validate vars and build API fragment
         env:
@@ -38,10 +32,8 @@ jobs:
           TMD_ADMIN_CORS_ORIGINS: ${{ vars.TMD_ADMIN_CORS_ORIGINS }}
           SERVER_DEPLOY_USERNAME: ${{ secrets.SERVER_DEPLOY_USERNAME }}
           SERVER_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.SERVER_DEPLOY_SSH_PRIVATE_KEY }}
-          TMD_ADMIN_S3_BUCKET: ${{ vars.TMD_ADMIN_S3_BUCKET }}
           TMD_ADMIN_S3_PUBLIC_BASE_URL: ${{ vars.TMD_ADMIN_S3_PUBLIC_BASE_URL }}
           TMD_ADMIN_S3_ENDPOINT: ${{ vars.TMD_ADMIN_S3_ENDPOINT }}
-          TMD_ADMIN_S3_REGION: ${{ vars.TMD_ADMIN_S3_REGION }}
           TMD_ADMIN_R2_ACCESS_KEY_ID: ${{ secrets.TMD_ADMIN_R2_ACCESS_KEY_ID }}
           TMD_ADMIN_R2_SECRET_ACCESS_KEY: ${{ secrets.TMD_ADMIN_R2_SECRET_ACCESS_KEY }}
         run: |
@@ -53,8 +45,8 @@ jobs:
           required=(
             SERVER_HOST ENV_POOL_DIR TMD_ADMIN_API_APP_NAME DB_APP_NAME_SUFFIX
             SERVER_DEPLOY_USERNAME SERVER_DEPLOY_SSH_PRIVATE_KEY
-            TMD_ADMIN_NODE_ENV TMD_ADMIN_S3_REGION
-            TMD_ADMIN_S3_BUCKET TMD_ADMIN_S3_PUBLIC_BASE_URL TMD_ADMIN_S3_ENDPOINT
+            TMD_ADMIN_NODE_ENV
+            TMD_ADMIN_S3_PUBLIC_BASE_URL TMD_ADMIN_S3_ENDPOINT
             TMD_ADMIN_R2_ACCESS_KEY_ID TMD_ADMIN_R2_SECRET_ACCESS_KEY
           )
           missing=()
@@ -67,32 +59,23 @@ jobs:
             exit 1
           fi
           printf '%s\n' "NODE_ENV=${TMD_ADMIN_NODE_ENV}" >> fragment.env
-          printf '%s\n' "S3_REGION=${TMD_ADMIN_S3_REGION}" >> fragment.env
-          printf '%s\n' "S3_BUCKET=${TMD_ADMIN_S3_BUCKET}" >> fragment.env
           printf '%s\n' "S3_PUBLIC_BASE_URL=${TMD_ADMIN_S3_PUBLIC_BASE_URL}" >> fragment.env
           printf '%s\n' "S3_ENDPOINT=${TMD_ADMIN_S3_ENDPOINT}" >> fragment.env
           ak="$(printf '%s' "${TMD_ADMIN_R2_ACCESS_KEY_ID}" | tr -d '\n\r')"
           sk="$(printf '%s' "${TMD_ADMIN_R2_SECRET_ACCESS_KEY}" | tr -d '\n\r')"
           printf '%s\n' "S3_ACCESS_KEY_ID=${ak}" "S3_SECRET_ACCESS_KEY=${sk}" >> fragment.env
-          echo "API fragment ready for ${{ matrix.sync_env }}."
+          echo "API fragment ready for staging."
 
       - name: Upload API fragment artifact
         uses: actions/upload-artifact@v5.0.0
         with:
-          name: sync-env-fragment-api-${{ matrix.sync_env }}
+          name: sync-env-fragment-api-staging
           path: fragment.env
 
-  build-db-fragment:
-    name: Build Postgres env fragment (${{ matrix.environment }})
+  build-db-fragment-staging:
+    name: Build Postgres env fragment (staging)
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - environment: STAGING
-            sync_env: staging
-          - environment: PROD
-            sync_env: prod
-    environment: ${{ matrix.environment }}
+    environment: STAGING
     steps:
       - name: Validate vars and build DB fragment
         env:
@@ -138,17 +121,17 @@ jobs:
           printf 'POSTGRES_PASSWORD=%s\n' "${super_pw}" >> fragment.env
           printf '%s\n' "POSTGRES_APP_USER=${pg_app}" >> fragment.env
           printf 'POSTGRES_APP_PASSWORD=%s\n' "${app_pw}" >> fragment.env
-          echo "DB fragment ready for ${{ matrix.sync_env }} (service basename ${db_app_name} = API + DB_APP_NAME_SUFFIX)."
+          echo "DB fragment ready for staging (service basename ${db_app_name} = API + DB_APP_NAME_SUFFIX)."
 
       - name: Upload DB fragment artifact
         uses: actions/upload-artifact@v5.0.0
         with:
-          name: sync-env-fragment-db-${{ matrix.sync_env }}
+          name: sync-env-fragment-db-staging
           path: fragment.env
 
   sync-api-staging:
     name: Sync API env (staging)
-    needs: [build-api-fragment]
+    needs: [build-api-fragment-staging]
     uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@v2.0.0
     with:
       sync_env: staging
@@ -156,19 +139,9 @@ jobs:
       app_name: ${{ vars.TMD_ADMIN_API_APP_NAME }}
     secrets: inherit
 
-  sync-api-prod:
-    name: Sync API env (prod)
-    needs: [build-api-fragment]
-    uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@v2.0.0
-    with:
-      sync_env: prod
-      fragment_artifact: sync-env-fragment-api-prod/fragment.env
-      app_name: ${{ vars.TMD_ADMIN_API_APP_NAME }}
-    secrets: inherit
-
   sync-db-staging:
     name: Sync DB env (staging)
-    needs: [build-db-fragment]
+    needs: [build-db-fragment-staging]
     uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@v2.0.0
     with:
       sync_env: staging
@@ -176,9 +149,133 @@ jobs:
       app_name: ${{ format('{0}{1}', vars.TMD_ADMIN_API_APP_NAME, vars.DB_APP_NAME_SUFFIX) }}
     secrets: inherit
 
+  build-api-fragment-prod:
+    name: Build API env fragment (prod)
+    needs: [sync-api-staging, sync-db-staging]
+    runs-on: ubuntu-latest
+    environment: PROD
+    steps:
+      - name: Validate vars and build API fragment
+        env:
+          SERVER_HOST: ${{ vars.SERVER_HOST }}
+          ENV_POOL_DIR: ${{ vars.ENV_POOL_DIR }}
+          TMD_ADMIN_API_APP_NAME: ${{ vars.TMD_ADMIN_API_APP_NAME }}
+          DB_APP_NAME_SUFFIX: ${{ vars.DB_APP_NAME_SUFFIX }}
+          TMD_ADMIN_NODE_ENV: ${{ vars.TMD_ADMIN_NODE_ENV }}
+          TMD_ADMIN_CORS_ORIGINS: ${{ vars.TMD_ADMIN_CORS_ORIGINS }}
+          SERVER_DEPLOY_USERNAME: ${{ secrets.SERVER_DEPLOY_USERNAME }}
+          SERVER_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.SERVER_DEPLOY_SSH_PRIVATE_KEY }}
+          TMD_ADMIN_S3_PUBLIC_BASE_URL: ${{ vars.TMD_ADMIN_S3_PUBLIC_BASE_URL }}
+          TMD_ADMIN_S3_ENDPOINT: ${{ vars.TMD_ADMIN_S3_ENDPOINT }}
+          TMD_ADMIN_R2_ACCESS_KEY_ID: ${{ secrets.TMD_ADMIN_R2_ACCESS_KEY_ID }}
+          TMD_ADMIN_R2_SECRET_ACCESS_KEY: ${{ secrets.TMD_ADMIN_R2_SECRET_ACCESS_KEY }}
+        run: |
+          set -euo pipefail
+          : > fragment.env
+          if [ -n "${TMD_ADMIN_CORS_ORIGINS:-}" ]; then
+            printf '%s\n' "CORS_ORIGINS=${TMD_ADMIN_CORS_ORIGINS}" >> fragment.env
+          fi
+          required=(
+            SERVER_HOST ENV_POOL_DIR TMD_ADMIN_API_APP_NAME DB_APP_NAME_SUFFIX
+            SERVER_DEPLOY_USERNAME SERVER_DEPLOY_SSH_PRIVATE_KEY
+            TMD_ADMIN_NODE_ENV
+            TMD_ADMIN_S3_PUBLIC_BASE_URL TMD_ADMIN_S3_ENDPOINT
+            TMD_ADMIN_R2_ACCESS_KEY_ID TMD_ADMIN_R2_SECRET_ACCESS_KEY
+          )
+          missing=()
+          for v in "${required[@]}"; do
+            eval "val=\${$v-}"
+            [ -z "${val}" ] && missing+=("$v")
+          done
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "ERROR: Missing required vars or secrets: ${missing[*]}"
+            exit 1
+          fi
+          printf '%s\n' "NODE_ENV=${TMD_ADMIN_NODE_ENV}" >> fragment.env
+          printf '%s\n' "S3_PUBLIC_BASE_URL=${TMD_ADMIN_S3_PUBLIC_BASE_URL}" >> fragment.env
+          printf '%s\n' "S3_ENDPOINT=${TMD_ADMIN_S3_ENDPOINT}" >> fragment.env
+          ak="$(printf '%s' "${TMD_ADMIN_R2_ACCESS_KEY_ID}" | tr -d '\n\r')"
+          sk="$(printf '%s' "${TMD_ADMIN_R2_SECRET_ACCESS_KEY}" | tr -d '\n\r')"
+          printf '%s\n' "S3_ACCESS_KEY_ID=${ak}" "S3_SECRET_ACCESS_KEY=${sk}" >> fragment.env
+          echo "API fragment ready for prod."
+
+      - name: Upload API fragment artifact
+        uses: actions/upload-artifact@v5.0.0
+        with:
+          name: sync-env-fragment-api-prod
+          path: fragment.env
+
+  build-db-fragment-prod:
+    name: Build Postgres env fragment (prod)
+    needs: [sync-api-staging, sync-db-staging]
+    runs-on: ubuntu-latest
+    environment: PROD
+    steps:
+      - name: Validate vars and build DB fragment
+        env:
+          SERVER_HOST: ${{ vars.SERVER_HOST }}
+          ENV_POOL_DIR: ${{ vars.ENV_POOL_DIR }}
+          TMD_ADMIN_API_APP_NAME: ${{ vars.TMD_ADMIN_API_APP_NAME }}
+          DB_APP_NAME_SUFFIX: ${{ vars.DB_APP_NAME_SUFFIX }}
+          TMD_ADMIN_API_DB_SUPERUSER: ${{ vars.TMD_ADMIN_API_DB_SUPERUSER }}
+          TMD_ADMIN_API_DB_APP_USER: ${{ vars.TMD_ADMIN_API_DB_APP_USER }}
+          SERVER_DEPLOY_USERNAME: ${{ secrets.SERVER_DEPLOY_USERNAME }}
+          SERVER_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.SERVER_DEPLOY_SSH_PRIVATE_KEY }}
+          TMD_ADMIN_API_DB_SUPERUSER_PASSWORD: ${{ secrets.TMD_ADMIN_API_DB_SUPERUSER_PASSWORD }}
+          TMD_ADMIN_API_DB_APP_USER_PASSWORD: ${{ secrets.TMD_ADMIN_API_DB_APP_USER_PASSWORD }}
+        run: |
+          set -euo pipefail
+          : > fragment.env
+          api="${TMD_ADMIN_API_APP_NAME:?TMD_ADMIN_API_APP_NAME must be set}"
+          if [ -z "${DB_APP_NAME_SUFFIX:-}" ]; then
+            echo "ERROR: GitHub Variable DB_APP_NAME_SUFFIX must be set and non-empty (same value as BehindTheMusicTree/infrastructure)."
+            exit 1
+          fi
+          db_app_name="${api}${DB_APP_NAME_SUFFIX}"
+          required=(
+            SERVER_HOST ENV_POOL_DIR TMD_ADMIN_API_APP_NAME DB_APP_NAME_SUFFIX
+            SERVER_DEPLOY_USERNAME SERVER_DEPLOY_SSH_PRIVATE_KEY
+            TMD_ADMIN_API_DB_SUPERUSER TMD_ADMIN_API_DB_APP_USER
+            TMD_ADMIN_API_DB_SUPERUSER_PASSWORD TMD_ADMIN_API_DB_APP_USER_PASSWORD
+          )
+          missing=()
+          for v in "${required[@]}"; do
+            eval "val=\${$v-}"
+            [ -z "${val}" ] && missing+=("$v")
+          done
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "ERROR: Missing required vars or secrets: ${missing[*]}"
+            exit 1
+          fi
+          pg_super="${TMD_ADMIN_API_DB_SUPERUSER}"
+          pg_app="${TMD_ADMIN_API_DB_APP_USER}"
+          super_pw="$(printf '%s' "${TMD_ADMIN_API_DB_SUPERUSER_PASSWORD}" | tr -d '\n\r')"
+          app_pw="$(printf '%s' "${TMD_ADMIN_API_DB_APP_USER_PASSWORD}" | tr -d '\n\r')"
+          printf '%s\n' "POSTGRES_USER=${pg_super}" "POSTGRES_DB=app" >> fragment.env
+          printf 'POSTGRES_PASSWORD=%s\n' "${super_pw}" >> fragment.env
+          printf '%s\n' "POSTGRES_APP_USER=${pg_app}" >> fragment.env
+          printf 'POSTGRES_APP_PASSWORD=%s\n' "${app_pw}" >> fragment.env
+          echo "DB fragment ready for prod (service basename ${db_app_name} = API + DB_APP_NAME_SUFFIX)."
+
+      - name: Upload DB fragment artifact
+        uses: actions/upload-artifact@v5.0.0
+        with:
+          name: sync-env-fragment-db-prod
+          path: fragment.env
+
+  sync-api-prod:
+    name: Sync API env (prod)
+    needs: [build-api-fragment-prod]
+    uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@v2.0.0
+    with:
+      sync_env: prod
+      fragment_artifact: sync-env-fragment-api-prod/fragment.env
+      app_name: ${{ vars.TMD_ADMIN_API_APP_NAME }}
+    secrets: inherit
+
   sync-db-prod:
     name: Sync DB env (prod)
-    needs: [build-db-fragment]
+    needs: [build-db-fragment-prod]
     uses: BehindTheMusicTree/github-workflows/.github/workflows/sync-env-to-server.yml@v2.0.0
     with:
       sync_env: prod
