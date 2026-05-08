@@ -28,7 +28,6 @@ jobs:
           ENV_POOL_DIR: ${{ vars.ENV_POOL_DIR }}
           TMD_ADMIN_API_APP_NAME: ${{ vars.TMD_ADMIN_API_APP_NAME }}
           DB_APP_NAME_SUFFIX: ${{ vars.DB_APP_NAME_SUFFIX }}
-          TMD_ADMIN_NODE_ENV: ${{ vars.TMD_ADMIN_NODE_ENV }}
           TMD_ADMIN_CORS_ORIGINS: ${{ vars.TMD_ADMIN_CORS_ORIGINS }}
           SERVER_DEPLOY_USERNAME: ${{ secrets.SERVER_DEPLOY_USERNAME }}
           SERVER_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.SERVER_DEPLOY_SSH_PRIVATE_KEY }}
@@ -45,7 +44,6 @@ jobs:
           required=(
             SERVER_HOST ENV_POOL_DIR TMD_ADMIN_API_APP_NAME DB_APP_NAME_SUFFIX
             SERVER_DEPLOY_USERNAME SERVER_DEPLOY_SSH_PRIVATE_KEY
-            TMD_ADMIN_NODE_ENV
             TMD_ADMIN_S3_PUBLIC_BASE_URL TMD_ADMIN_S3_ENDPOINT
             TMD_ADMIN_R2_ACCESS_KEY_ID TMD_ADMIN_R2_SECRET_ACCESS_KEY
           )
@@ -58,7 +56,7 @@ jobs:
             echo "ERROR: Missing required vars or secrets: ${missing[*]}"
             exit 1
           fi
-          printf '%s\n' "NODE_ENV=${TMD_ADMIN_NODE_ENV}" >> fragment.env
+          printf '%s\n' "NODE_ENV=staging" >> fragment.env
           printf '%s\n' "S3_PUBLIC_BASE_URL=${TMD_ADMIN_S3_PUBLIC_BASE_URL}" >> fragment.env
           printf '%s\n' "S3_ENDPOINT=${TMD_ADMIN_S3_ENDPOINT}" >> fragment.env
           ak="$(printf '%s' "${TMD_ADMIN_R2_ACCESS_KEY_ID}" | tr -d '\n\r')"
@@ -161,7 +159,6 @@ jobs:
           ENV_POOL_DIR: ${{ vars.ENV_POOL_DIR }}
           TMD_ADMIN_API_APP_NAME: ${{ vars.TMD_ADMIN_API_APP_NAME }}
           DB_APP_NAME_SUFFIX: ${{ vars.DB_APP_NAME_SUFFIX }}
-          TMD_ADMIN_NODE_ENV: ${{ vars.TMD_ADMIN_NODE_ENV }}
           TMD_ADMIN_CORS_ORIGINS: ${{ vars.TMD_ADMIN_CORS_ORIGINS }}
           SERVER_DEPLOY_USERNAME: ${{ secrets.SERVER_DEPLOY_USERNAME }}
           SERVER_DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.SERVER_DEPLOY_SSH_PRIVATE_KEY }}
@@ -178,7 +175,6 @@ jobs:
           required=(
             SERVER_HOST ENV_POOL_DIR TMD_ADMIN_API_APP_NAME DB_APP_NAME_SUFFIX
             SERVER_DEPLOY_USERNAME SERVER_DEPLOY_SSH_PRIVATE_KEY
-            TMD_ADMIN_NODE_ENV
             TMD_ADMIN_S3_PUBLIC_BASE_URL TMD_ADMIN_S3_ENDPOINT
             TMD_ADMIN_R2_ACCESS_KEY_ID TMD_ADMIN_R2_SECRET_ACCESS_KEY
           )
@@ -191,7 +187,7 @@ jobs:
             echo "ERROR: Missing required vars or secrets: ${missing[*]}"
             exit 1
           fi
-          printf '%s\n' "NODE_ENV=${TMD_ADMIN_NODE_ENV}" >> fragment.env
+          printf '%s\n' "NODE_ENV=production" >> fragment.env
           printf '%s\n' "S3_PUBLIC_BASE_URL=${TMD_ADMIN_S3_PUBLIC_BASE_URL}" >> fragment.env
           printf '%s\n' "S3_ENDPOINT=${TMD_ADMIN_S3_ENDPOINT}" >> fragment.env
           ak="$(printf '%s' "${TMD_ADMIN_R2_ACCESS_KEY_ID}" | tr -d '\n\r')"
