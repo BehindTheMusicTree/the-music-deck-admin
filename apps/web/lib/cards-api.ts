@@ -70,7 +70,7 @@ async function fetchJson<T>(path: string): Promise<T> {
   let res: Response;
   try {
     res = await fetch(url, {
-      cache: "force-cache",
+      cache: "no-store",
     });
   } catch (err) {
     throw new Error(
