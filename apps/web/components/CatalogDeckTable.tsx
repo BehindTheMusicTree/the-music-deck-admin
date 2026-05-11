@@ -369,7 +369,7 @@ export default function CatalogDeckTable({
         la.localeCompare(lb, undefined, { sensitivity: "base" }),
       )
       .map(([value, label]) => ({ value, label }));
-  }, []);
+  }, [catalogEntries]);
 
   const eraFilterOptions = useMemo(() => {
     const s = new Set<string>();
@@ -377,7 +377,7 @@ export default function CatalogDeckTable({
     return [...s].sort((a, b) =>
       a.localeCompare(b, undefined, { sensitivity: "base" }),
     );
-  }, []);
+  }, [catalogEntries]);
 
   const genreFilterOptions = useMemo(() => {
     const s = new Set<string>();
@@ -385,7 +385,7 @@ export default function CatalogDeckTable({
     return [...s].sort((a, b) =>
       a.localeCompare(b, undefined, { sensitivity: "base" }),
     );
-  }, []);
+  }, [catalogEntries]);
 
   const lineGenreFilterOptions = useMemo(() => {
     const s = new Set<string>();
@@ -397,7 +397,7 @@ export default function CatalogDeckTable({
       if (b === "__empty__") return 1;
       return a.localeCompare(b, undefined, { sensitivity: "base" });
     });
-  }, []);
+  }, [catalogEntries]);
 
   const countryFilterOptions = useMemo(() => {
     const s = new Set<string>();
@@ -409,7 +409,7 @@ export default function CatalogDeckTable({
       if (b === "__empty__") return -1;
       return a.localeCompare(b, undefined, { sensitivity: "base" });
     });
-  }, []);
+  }, [catalogEntries]);
 
   const visibleRows = useMemo(() => {
     let rows = catalogEntries;
@@ -477,6 +477,7 @@ export default function CatalogDeckTable({
     titleQuery,
     artistQuery,
     abilityQuery,
+    catalogEntries,
     sortKey,
     sortAsc,
   ]);
@@ -485,7 +486,7 @@ export default function CatalogDeckTable({
     const byId = new Map<number, CatalogEntry>();
     for (const e of catalogEntries) byId.set(e.card.id, e);
     return byId;
-  }, []);
+  }, [catalogEntries]);
   return (
     <div className={["w-full min-w-0", className].filter(Boolean).join(" ")}>
       <CatalogSourceTabs
@@ -515,6 +516,8 @@ export default function CatalogDeckTable({
           role="tabpanel"
           aria-labelledby="catalog-tab-deck"
         >
+          <CatalogSeriesSummaryTable entries={catalogEntries} />
+
           <CatalogLayoutToolbar
             viewMode={viewMode}
             visibleCount={visibleRows.length}
@@ -524,8 +527,6 @@ export default function CatalogDeckTable({
             }}
             onSelectGrid={() => setViewMode("grid")}
           />
-          <CatalogSeriesSummaryTable entries={catalogEntries} />
-
           <div className="w-full min-w-0 rounded-[6px] border border-ui-border bg-[#0f0f14]/35 overflow-x-auto">
             <table className="w-full min-w-[1820px] border-collapse text-left">
               <thead>
