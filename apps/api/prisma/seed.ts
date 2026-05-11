@@ -364,6 +364,12 @@ async function replaceSongs(
 }
 
 async function main(): Promise<void> {
+  const existing = await prisma.card.count();
+  if (existing > 0) {
+    console.log("Seed: database already populated, skipping.");
+    return;
+  }
+
   await seedGenres(prisma);
   const codeByAnchorName = await loadPrintedTypeCodeByGenreName();
   const { shipped, wishlist } = collectRows();
@@ -382,28 +388,8 @@ async function main(): Promise<void> {
   for (const row of transitions)
     await upsertTransition(row, printedById.get(row.id)!);
 
-  await prisma.songCard.deleteMany({
-    where: { id: { notIn: Array.from(validSongIds) } },
-  });
-  await prisma.wishlistSong.deleteMany({
-    where: { id: { notIn: wishlist.map((w) => w.def.id) } },
-  });
-  await prisma.transitionCard.deleteMany({
-    where: { id: { notIn: transitions.map((t) => t.id) } },
-  });
-  await prisma.card.deleteMany({
-    where: {
-      id: {
-        notIn: [
-          ...Array.from(validSongIds),
-          ...transitions.map((t) => t.id),
-        ],
-      },
-    },
-  });
-
   console.log(
-    `Seed: ${shipped.length} songs, ${wishlist.length} wishlist songs, and ${transitions.length} transition cards upserted.`,
+    `Seed: ${shipped.length} songs, ${wishlist.length} wishlist songs, and ${transitions.length} transition cards inserted.`,
   );
 }
 
