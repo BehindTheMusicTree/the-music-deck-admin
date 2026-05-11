@@ -12,7 +12,10 @@ COPY apps/api apps/api
 RUN pnpm --filter api exec prisma generate
 RUN pnpm --filter api build
 # Portable prod tree: own node_modules + dist (no reliance on monorepo path layout). --legacy: workspace without injectWorkspacePackages.
-RUN pnpm --filter api --prod deploy --legacy /deploy/api
+# Regenerate client inside the deploy tree: `pnpm deploy` can omit hoisted `node_modules/.prisma` from the monorepo, causing
+# `Cannot find module '.prisma/client/default'` at runtime when `migrate deploy` succeeds but Nest loads `@prisma/client`.
+RUN pnpm --filter api --prod deploy --legacy /deploy/api \
+    && cd /deploy/api && ./node_modules/.bin/prisma generate
 
 FROM node:22-alpine AS runner
 ARG APP_VERSION=unknown
