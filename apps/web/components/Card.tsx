@@ -491,7 +491,7 @@ export default function Card({
           }
         >
           <span
-            className={styles.headerIcon}
+            className={`${styles.headerIcon}${resolved.resolvedGenre === "Classical" ? ` ${styles.headerIconClassical}` : ""}`}
             dangerouslySetInnerHTML={{ __html: effectiveTheme.icon }}
           />
           <div
