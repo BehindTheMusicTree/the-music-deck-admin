@@ -1,12 +1,8 @@
 name: Turbo CI
 
 on:
-  push:
-    branches: [develop]
-    tags:
-      - "v*"
   pull_request:
-    branches: [develop]
+    branches: [develop, main]
 
 concurrency:
   group: turbo-ci-${{ github.workflow }}-${{ github.ref }}
