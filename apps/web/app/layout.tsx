@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Cinzel, Cormorant_Garamond, Space_Mono } from "next/font/google";
-import CharterTabs from "@/components/CharterTabs";
+import CharterTabs from "@/components/charters/CharterTabs";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
 

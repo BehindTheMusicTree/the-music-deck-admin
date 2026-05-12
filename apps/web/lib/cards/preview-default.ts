@@ -1,4 +1,4 @@
-import type { CardData } from "@/components/Card";
+import type { CardData } from "@/components/cards/Card";
 import { ARTWORK_CREATED_AT } from "@/lib/cards/artwork-created-at";
 
 /** Default card for genre / theme preview tooling. */

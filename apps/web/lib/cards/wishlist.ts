@@ -1,4 +1,4 @@
-import type { CardData } from "@/components/Card";
+import type { CardData } from "@/components/cards/Card";
 import { assignCatalogRowKeys } from "@repo/cards-domain";
 import type { GenreTheme } from "@/lib/card-theme-types";
 import {

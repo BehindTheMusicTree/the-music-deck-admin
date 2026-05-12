@@ -1,4 +1,4 @@
-import type { CardData } from "@/components/Card";
+import type { CardData } from "@/components/cards/Card";
 import { CLASSICAL_CARDS } from "./classical";
 import { DISCO_FUNK_CARDS } from "./disco-funk";
 import { ELECTRONIC_CARDS } from "./electronic";

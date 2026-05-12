@@ -1,4 +1,4 @@
-import type { CardData } from "@/components/Card";
+import type { CardData } from "@/components/cards/Card";
 import type { CatalogSeriesType, GenreTheme } from "@/lib/card-theme-types";
 import {
   APP_GENRE_THEMES,

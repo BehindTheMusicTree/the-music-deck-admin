@@ -1,5 +1,5 @@
 import { CARD_ARTWORK_PROMPTS } from "./artwork-prompts";
-import type { CardData } from "@/components/Card";
+import type { CardData } from "@/components/cards/Card";
 import {
   type RootGenreName,
   displayGenreLabel,

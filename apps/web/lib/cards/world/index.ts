@@ -1,4 +1,4 @@
-import type { CardData } from "@/components/Card";
+import type { CardData } from "@/components/cards/Card";
 import { isCountrySubgenre } from "@/lib/genres";
 import { ALGERIA_CARDS } from "./algeria";
 import { BRETAGNE_CARDS } from "./bretagne";

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Card, { type CardData } from "@/components/Card";
+import Card, { type CardData } from "@/components/cards/Card";
 import {
   type RootGenreName,
   APP_GENRE_THEMES,

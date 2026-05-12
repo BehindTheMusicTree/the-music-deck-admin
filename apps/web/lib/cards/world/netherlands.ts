@@ -1,4 +1,4 @@
-import type { CardData } from "@/components/Card";
+import type { CardData } from "@/components/cards/Card";
 import { ART, ARTWORK_CREATED_AT } from "../_card-helpers";
 
 export const NETHERLANDS_CARDS: CardData[] = [

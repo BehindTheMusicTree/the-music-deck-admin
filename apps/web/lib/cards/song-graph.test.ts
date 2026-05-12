@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { CardData } from "@/components/Card";
+import type { CardData } from "@/components/cards/Card";
 import { buildCardSongIndex, deriveSongsInFromSongIndex } from "./song-graph";
 
 const cards: CardData[] = [
