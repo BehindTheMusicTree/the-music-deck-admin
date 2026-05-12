@@ -1,0 +1,882 @@
+/* Outer wrapper: positions the card + transition strips as a unit. Strips are siblings of
+   .card inside this frame so their protrusion is not clipped by the card itself. */
+.cardFrame {
+  position: relative;
+  /* Match .card width so absolute strips (e.g. genreTransitionStripOut: right: -7px)
+     align to the card’s right border. Without this, a narrow parent (e.g. .wrapSm 149px
+     in `small` mode) shrinks the containing block and strips sit ~mid-card. */
+  width: 272px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.cardFrameStatic {
+  cursor: default;
+}
+
+/* Card frame — 272×400. Typography below is compact “token” UI (<15px) on purpose;
+   the 15px floor applies to page chrome in app routes, not to card / wheel content. */
+.card {
+  width: 272px;
+  height: 400px;
+  border-radius: 16px;
+  border: 10px solid var(--gc-border);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.85);
+  overflow: visible;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 32px 56px rgba(0, 0, 0, 0.9),
+    0 0 0 1px var(--gc-border);
+}
+
+/* No hover lift (e.g. catalog detail preview): keep default depth + no movement */
+.cardStatic {
+  cursor: default;
+}
+.cardStatic.card:hover,
+.cardStatic.cardNoBorder:hover {
+  transform: none;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.85);
+}
+.cardShell.cardStatic:hover {
+  transform: none;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.85);
+}
+
+.cardNoBorder {
+  border: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  /* Keep the outer shape consistently clipped (bleed art + footer band) */
+  border-radius: 16px;
+  overflow: hidden;
+}
+.cardNoBorder:hover {
+  box-shadow: 0 32px 56px rgba(0, 0, 0, 0.9);
+}
+
+/* Bleed layout: art goes edge-to-edge; keep UI bands inset like the 10px border case */
+.cardNoBorder .ability {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.cardNoBorder .stats {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+/* Last row: full width so bottom curve reads cleanly; text stays padded inside */
+.cardNoBorder .footer {
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  background: rgba(0, 0, 0, 0.88);
+  border-bottom-left-radius: max(0px, calc(16px - 10px));
+  border-bottom-right-radius: max(0px, calc(16px - 10px));
+}
+
+/* World USA: landscape flag, border motif rotated 90° counter-clockwise */
+.cardShell {
+  position: relative;
+  width: 272px;
+  height: 400px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.85);
+  flex-shrink: 0;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+.cardShell:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 32px 56px rgba(0, 0, 0, 0.9),
+    0 0 0 1px var(--gc-border);
+}
+.cardFlagUsR90 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 400px;
+  height: 272px;
+  z-index: 0;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  box-sizing: border-box;
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+/* World: full-bleed flag border (e.g. France), no rotation */
+.cardFlagFlat {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  box-sizing: border-box;
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+/* World border flags: slightly tarnished (faded, darkened) */
+.cardWorldFlagTarnish {
+  filter: saturate(0.78) brightness(0.9) contrast(1.03);
+  opacity: 0.7;
+  box-shadow: inset 0 0 16px rgba(12, 10, 8, 0.28);
+}
+
+.cardFlagFace {
+  position: absolute;
+  inset: 10px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: 6px;
+  overflow: visible;
+}
+
+/* Header */
+.header {
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  height: 44px;
+  min-height: 44px;
+  background: var(--gc-header-bg);
+  flex-shrink: 0;
+}
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+  min-width: 0;
+}
+.headerIcon {
+  flex-shrink: 0;
+  color: #fafbff;
+  display: flex;
+  align-items: center;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 1px rgba(0, 0, 0, 0.45));
+}
+.headerIconClassical {
+  transform: translateY(-2px) scale(1.15);
+}
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.titleGroupSolo {
+  justify-content: center;
+  min-height: 24px;
+}
+.title {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  color: #fafbff;
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 0.85),
+    0 1px 2px rgba(0, 0, 0, 0.55),
+    0 2px 6px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.titleSm {
+  font-size: 10.5px;
+  letter-spacing: 0.65px;
+}
+.titleXs {
+  font-size: 9.5px;
+  letter-spacing: 0.45px;
+}
+.artist {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: 0.4px;
+  color: #f6f7fc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.94;
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 0.8),
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 2px 5px rgba(0, 0, 0, 0.32);
+}
+
+/* Score circle */
+.score {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--gc-border);
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fafbff;
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 0.9),
+    0 1px 2px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 0 var(--score-glow-r, 4px) var(--score-glow-c, transparent);
+}
+
+/* Body — fills remaining space below header, artwork + panels live here */
+.body {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+.bodyArtOverBorder {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+}
+
+/* Artwork area — fills entire body */
+.art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  background: #0c0c0e;
+}
+.artOverBorder {
+  inset: -10px;
+}
+/* object-fit: cover, top + horizontal center. With `artworkOffsetY`, inline height/translate
+   keep the art box bottom flush (taller by |offset|, then shifted) without stretching. */
+.artImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+.artSvg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Panels above artwork */
+.genreStrip,
+.matchupStrip,
+.ability,
+.stats,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Genre strip — parchment with diamond-cut corners via clip-path */
+.genreStrip {
+  position: relative;
+  background: var(--gc-parch-strip, #ede4cc);
+  padding: 6px 14px;
+  margin: 4px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+  /* 10px diamond cut on left and right sides */
+  clip-path: polygon(
+    10px 0%,
+    calc(100% - 10px) 0%,
+    100% 50%,
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0% 50%
+  );
+}
+.genreText {
+  font-family: "Cinzel", serif;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #2e2010;
+  line-height: 1;
+  position: relative;
+  top: 1px;
+}
+.genreStripSide {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+/* Right column: subgenre text to the left of its diamond; cluster aligned to strip end */
+.genreStripSubSide {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+/* Matchup strip — below Genre strip: weak (reddish left), advantage (greenish right) */
+.matchupStrip {
+  margin: 0 40px 4px;
+  display: flex;
+  flex-shrink: 0;
+  min-height: 22px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+  clip-path: polygon(
+    8px 0%,
+    calc(100% - 8px) 0%,
+    100% 50%,
+    calc(100% - 8px) 100%,
+    8px 100%,
+    0% 50%
+  );
+}
+.matchupHalf {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 5px;
+}
+.matchupWeak {
+  background:
+    linear-gradient(145deg, rgba(186, 38, 38, 0.6), rgba(120, 18, 18, 0.42)),
+    #e8dcc8;
+}
+.matchupAdv {
+  background:
+    linear-gradient(145deg, rgba(24, 154, 86, 0.56), rgba(30, 112, 68, 0.4)),
+    #e8dcc8;
+}
+.matchupCluster {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+}
+.matchupClusterWeak {
+  justify-content: flex-end;
+}
+.matchupClusterAdv {
+  justify-content: flex-start;
+}
+.matchupName {
+  font-family: "Cinzel", serif;
+  font-size: 6.5px;
+  letter-spacing: 0.6px;
+  color: #2a1c10;
+  line-height: 1;
+  max-width: 68px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.matchupNameSm {
+  font-size: 5.5px;
+  letter-spacing: 0.45px;
+  max-width: 58px;
+}
+.matchupPip {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  box-sizing: border-box;
+  transform: rotate(45deg) translateY(0.5px);
+  flex-shrink: 0;
+  opacity: 0.95;
+}
+.matchupPipSm {
+  width: 6px;
+  height: 6px;
+}
+.matchupEmpty {
+  font-family: "Space Mono", monospace;
+  font-size: 7px;
+  letter-spacing: 0.5px;
+  color: rgba(46, 32, 16, 0.45);
+}
+.matchupEmptySm {
+  font-size: 6px;
+}
+
+.pip {
+  width: 9px;
+  height: 9px;
+  border-radius: 1px;
+  background: var(--gc-border);
+  box-sizing: border-box;
+  transform: rotate(45deg) translateY(1px);
+  opacity: 0.9;
+  flex-shrink: 0;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.pipFlag {
+  width: 9px;
+  height: 9px;
+  border-radius: 1px;
+  box-sizing: border-box;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  transform: translateY(1px);
+  flex-shrink: 0;
+  align-self: center;
+  opacity: 0.95;
+  overflow: hidden;
+}
+.pipSymbol {
+  font-size: 8px;
+  line-height: 1;
+  flex-shrink: 0;
+  align-self: center;
+  position: relative;
+  top: 1px;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Ability box */
+.ability {
+  background: var(--gc-parch-ability, #f4edd8);
+  padding: 7px 17px;
+  margin: 0 0 2px;
+  flex-shrink: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+}
+.abilityName {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #1a1208;
+  margin-bottom: 3px;
+}
+.abilityDesc {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 11px;
+  color: #2e2010;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Stats — one row: popularity symbols (left), intensity gradient + note (right) */
+.stats {
+  background: rgba(0, 0, 0, 0.28);
+  padding: 4px 6px 3px;
+  margin: 0 0 1px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.statsPop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 50%;
+  min-width: 0;
+  flex-shrink: 0;
+  align-self: center;
+  padding-top: 0;
+}
+.statsIntensity {
+  width: 50%;
+  min-width: 0;
+  padding: 0 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1px;
+}
+/* Right triangle (triangle rectangle): right angle at bottom-right (100% width) */
+.intensitySong {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  overflow: hidden;
+  /* Vertices: bottom-left, bottom-right, top-right — L droit en bas à droite = 100 % */
+  clip-path: polygon(0% 100%, 100% 100%, 100% 0%);
+  background: linear-gradient(180deg, #3a3a40 0%, #2c2c32 40%, #232327 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.5);
+  opacity: 0.95;
+}
+/* Visible fill width = pct%; inner layer is wider so spectrum is anchored: red fixed at track 100% */
+.intensityFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+  transition: width 0.14s ease-out;
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+}
+.intensityFillInner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  /* Spans full triangle width; parent clips to pct% so red stays aligned to track 100% */
+  width: calc(100% / (var(--intensity-pct, 100) / 100));
+  background: linear-gradient(
+    90deg,
+    #1a9a4a 0%,
+    #6ab04a 22%,
+    #d4a520 52%,
+    #d94a38 78%,
+    #c01e2a 100%
+  );
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+/* Cursor (curseur) at the proportional fill edge */
+.intensityFill::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: rgba(255, 250, 245, 0.98);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.35),
+    0 0 4px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+.intensityNoteRow {
+  position: relative;
+  height: 9px;
+  margin-top: 0;
+}
+.intensityNote {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-family: "Space Mono", monospace;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 0.95),
+    0 1px 3px rgba(0, 0, 0, 0.85);
+  line-height: 1;
+}
+.intensityNoteMuted {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Space Mono", monospace;
+  font-size: 7px;
+  color: rgba(255, 255, 255, 0.48);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+}
+.statsSm .intensityNote,
+.statsSm .intensityNoteMuted {
+  font-size: 5.5px;
+}
+.statsSm .statsPop {
+  gap: 2px;
+  padding-top: 0;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 10px 6px;
+  margin: 0 0 2px;
+  flex-shrink: 0;
+}
+.brand {
+  font-family: "Space Mono", monospace;
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow:
+    0 0 1px rgba(0, 0, 0, 0.65),
+    0 1px 2px rgba(0, 0, 0, 0.45);
+}
+.rarityRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.rarityText {
+  font-family: "Space Mono", monospace;
+  font-size: 7px;
+  letter-spacing: 1px;
+}
+
+/* Small variant */
+.cardSm {
+  transform: scale(calc(149 / 272));
+  transform-origin: top left;
+}
+.wrapSm {
+  /* Include the right-side out-strip protrusion in the small card footprint. */
+  width: 157px;
+  height: 220px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.zoomTrigger {
+  display: inline-block;
+}
+
+.zoomOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(6, 6, 8, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.zoomCard {
+  transform: scale(1.55);
+  transform-origin: center;
+}
+
+/* ─── Song transition strips ─────────────────────────────────────────────────
+   Siblings of .card inside .cardFrame. Vertical midpoint aligns with the header
+   bottom edge (44px content + 10px border = 54px from frame top).            */
+.trackTransitionStripIn {
+  position: absolute;
+  left: 0;
+  width: 128px;
+  height: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3px;
+  overflow: hidden;
+  z-index: 20;
+  transition: transform 0.15s;
+  padding: 0 10px 0 14px;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - 7px) 0%,
+    100% 50%,
+    calc(100% - 7px) 100%,
+    0% 100%
+  );
+}
+/* Out strip: arrow tip protrudes 7px past the card's right border edge */
+.trackTransitionStripOut {
+  position: absolute;
+  right: -7px;
+  width: 128px;
+  height: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3px;
+  overflow: hidden;
+  z-index: 20;
+  transition: transform 0.15s;
+  padding: 0 10px 0 14px;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - 7px) 0%,
+    100% 50%,
+    calc(100% - 7px) 100%,
+    0% 100%,
+    8px 50%
+  );
+}
+/* Dark triangle overlaid at the in-strip's left end — always visible regardless of card border colour. */
+.trackTransitionStripInNotch {
+  position: absolute;
+  left: 0;
+  width: 8px;
+  height: 19px;
+  background: #0a0a0e;
+  clip-path: polygon(0% 0%, 0% 100%, 100% 50%);
+  z-index: 21;
+  pointer-events: none;
+  transition: transform 0.15s;
+}
+.trackTransitionStripIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: inherit;
+}
+.trackTransitionStripIcon svg {
+  width: 10px;
+  height: 10px;
+  display: block;
+}
+.trackTransitionStripText {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  font-family: "Space Mono", monospace;
+  font-size: 7px;
+  letter-spacing: 0.4px;
+  color: inherit;
+  text-align: left;
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.9),
+    0 1px 2px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1;
+}
+
+/* ─── Genre transition strips ─────────────────────────────────────────────────
+   Positioned in JS centered on the genre strip (genre/subgenre band).        */
+.genreTransitionStripIn {
+  position: absolute;
+  left: 0;
+  width: 25px;
+  height: 19px;
+  padding: 4px 2px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 20;
+  transition: transform 0.15s;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - 7px) 0%,
+    100% 50%,
+    calc(100% - 7px) 100%,
+    0% 100%
+  );
+}
+.genreTransitionStripOut {
+  position: absolute;
+  right: -7px;
+  width: 25px;
+  height: 19px;
+  padding: 4px 2px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 20;
+  transition: transform 0.15s;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - 7px) 0%,
+    100% 50%,
+    calc(100% - 7px) 100%,
+    0% 100%,
+    8px 50%
+  );
+}
+.genreTransitionStripIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: inherit;
+  transform: translateX(2px);
+}
+.genreTransitionStripIcon svg {
+  width: 10px;
+  height: 10px;
+  display: block;
+}
+.genreTransitionStripIconRock svg {
+  width: 12px;
+  height: 12px;
+}
+.genreTransitionStripIconClassical svg {
+  width: 14px;
+  height: 14px;
+}
+.trackTransitionStripIconClassical svg {
+  width: 14px;
+  height: 14px;
+}
+.genreTransitionStripIconClassical {
+  transform: translateX(4px);
+}
+.trackTransitionStripIconClassical {
+  transform: translateX(2px);
+}
+.genreTransitionStripIconElectronic {
+  transform: translateX(3px);
+}
+.trackTransitionStripIconElectronic {
+  transform: translateX(1px);
+}
+.genreTransitionStripIconHipHop {
+  transform: translateX(1.5px);
+}
+
+/* ─── Hover lift (all strip siblings in .cardFrame) ──────────────────────── */
+.card:hover ~ .trackTransitionStripIn,
+.card:hover ~ .trackTransitionStripOut,
+.card:hover ~ .trackTransitionStripInNotch,
+.card:hover ~ .genreTransitionStripIn,
+.card:hover ~ .genreTransitionStripOut {
+  transform: translateY(-4px);
+}
+.cardStatic.card:hover ~ .trackTransitionStripIn,
+.cardStatic.card:hover ~ .trackTransitionStripOut,
+.cardStatic.card:hover ~ .trackTransitionStripInNotch,
+.cardStatic.card:hover ~ .genreTransitionStripIn,
+.cardStatic.card:hover ~ .genreTransitionStripOut {
+  transform: none;
+}

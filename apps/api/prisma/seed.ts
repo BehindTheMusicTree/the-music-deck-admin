@@ -27,6 +27,8 @@ import { STREAMING_URLS } from "./seed-data/streaming-urls";
 
 const prisma = new PrismaClient();
 
+type Db = Omit<PrismaClient, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">;
+
 type ShippedRow = { card: CardData; rowKey: string };
 type WishlistRow = { def: WishlistCardDef; rowKey: string };
 type TransitionRow = {
@@ -102,13 +104,13 @@ function collectTransitionRows(shipped: ShippedRow[], wishlist: WishlistRow[]): 
   });
 }
 
-async function loadPrintedTypeCodeByGenreName(): Promise<Map<string, string>> {
+async function loadPrintedTypeCodeByGenreName(db: Db): Promise<Map<string, string>> {
   const [genreRows, territoryRows] = await Promise.all([
-    prisma.genre.findMany({
+    db.genre.findMany({
       where: { code: { not: null } },
       select: { name: true, code: true },
     }),
-    prisma.territory.findMany({ select: { name: true, code: true } }),
+    db.territory.findMany({ select: { name: true, code: true } }),
   ]);
   const out = new Map<string, string>();
   for (const r of genreRows) if (r.code) out.set(r.name, r.code);
@@ -170,17 +172,17 @@ function dateFromArtworkCreatedAt(value: string | undefined): Date | null {
   return d;
 }
 
-async function upsertShipped(row: ShippedRow, printedSetId: string): Promise<void> {
+async function upsertShipped(db: Db, row: ShippedRow, printedSetId: string): Promise<void> {
   const { card, rowKey } = row;
   const genreRow = card.genre
-    ? await prisma.genre.findUnique({
+    ? await db.genre.findUnique({
         where: { name: card.genre },
         select: { id: true },
       })
     : null;
   const territoryName = card.country?.trim() ? card.country.trim() : null;
   const territoryRow = territoryName
-    ? await prisma.territory.findUnique({
+    ? await db.territory.findUnique({
         where: { name: territoryName },
         select: { id: true },
       })
@@ -189,7 +191,7 @@ async function upsertShipped(row: ShippedRow, printedSetId: string): Promise<voi
     throw new Error(`Unknown territory "${territoryName}" for song card ${card.id}`);
   }
 
-  await prisma.card.upsert({
+  await db.card.upsert({
     where: { id: card.id },
     create: {
       id: card.id,
@@ -218,7 +220,7 @@ async function upsertShipped(row: ShippedRow, printedSetId: string): Promise<voi
     },
   });
 
-  await prisma.songCard.upsert({
+  await db.songCard.upsert({
     where: { id: card.id },
     create: {
       id: card.id,
@@ -258,9 +260,9 @@ async function upsertShipped(row: ShippedRow, printedSetId: string): Promise<voi
   });
 }
 
-async function upsertWishlist(row: WishlistRow): Promise<void> {
+async function upsertWishlist(db: Db, row: WishlistRow): Promise<void> {
   const { def, rowKey } = row;
-  await prisma.wishlistSong.upsert({
+  await db.wishlistSong.upsert({
     where: { id: def.id },
     create: {
       id: def.id,
@@ -304,15 +306,15 @@ async function upsertWishlist(row: WishlistRow): Promise<void> {
   });
 }
 
-async function upsertTransition(row: TransitionRow, printedSetId: string): Promise<void> {
+async function upsertTransition(db: Db, row: TransitionRow, printedSetId: string): Promise<void> {
   const genreRow = row.genre
-    ? await prisma.genre.findUnique({
+    ? await db.genre.findUnique({
         where: { name: row.genre },
         select: { id: true },
       })
     : null;
 
-  await prisma.card.upsert({
+  await db.card.upsert({
     where: { id: row.id },
     create: {
       id: row.id,
@@ -329,7 +331,7 @@ async function upsertTransition(row: TransitionRow, printedSetId: string): Promi
     },
   });
 
-  await prisma.transitionCard.upsert({
+  await db.transitionCard.upsert({
     where: { id: row.id },
     create: {
       id: row.id,
@@ -344,6 +346,7 @@ async function upsertTransition(row: TransitionRow, printedSetId: string): Promi
 }
 
 async function replaceSongs(
+  db: Db,
   card: CardData,
   validIds: Set<number>,
 ): Promise<void> {
@@ -355,9 +358,9 @@ async function replaceSongs(
     }
     return true;
   });
-  await prisma.songSongTransition.deleteMany({ where: { fromId: card.id } });
+  await db.songSongTransition.deleteMany({ where: { fromId: card.id } });
   if (desired.length === 0) return;
-  await prisma.songSongTransition.createMany({
+  await db.songSongTransition.createMany({
     data: desired.map((toId) => ({ fromId: card.id, toId })),
     skipDuplicates: true,
   });
@@ -370,26 +373,31 @@ async function main(): Promise<void> {
     return;
   }
 
-  await seedGenres(prisma);
-  const codeByAnchorName = await loadPrintedTypeCodeByGenreName();
-  const { shipped, wishlist } = collectRows();
-  const transitions = collectTransitionRows(shipped, wishlist);
-  const printedById = await computePrintedSetIdsByCardId(
-    shipped,
-    transitions,
-    codeByAnchorName,
-  );
-  const validSongIds = new Set(shipped.map((r) => r.card.id));
+  await prisma.$transaction(
+    async (tx) => {
+      await seedGenres(tx as unknown as PrismaClient);
+      const codeByAnchorName = await loadPrintedTypeCodeByGenreName(tx);
+      const { shipped, wishlist } = collectRows();
+      const transitions = collectTransitionRows(shipped, wishlist);
+      const printedById = await computePrintedSetIdsByCardId(
+        shipped,
+        transitions,
+        codeByAnchorName,
+      );
+      const validSongIds = new Set(shipped.map((r) => r.card.id));
 
-  for (const row of shipped)
-    await upsertShipped(row, printedById.get(row.card.id)!);
-  for (const row of shipped) await replaceSongs(row.card, validSongIds);
-  for (const row of wishlist) await upsertWishlist(row);
-  for (const row of transitions)
-    await upsertTransition(row, printedById.get(row.id)!);
+      for (const row of shipped)
+        await upsertShipped(tx, row, printedById.get(row.card.id)!);
+      for (const row of shipped) await replaceSongs(tx, row.card, validSongIds);
+      for (const row of wishlist) await upsertWishlist(tx, row);
+      for (const row of transitions)
+        await upsertTransition(tx, row, printedById.get(row.id)!);
 
-  console.log(
-    `Seed: ${shipped.length} songs, ${wishlist.length} wishlist songs, and ${transitions.length} transition cards inserted.`,
+      console.log(
+        `Seed: ${shipped.length} songs, ${wishlist.length} wishlist songs, and ${transitions.length} transition cards inserted.`,
+      );
+    },
+    { timeout: 60_000 },
   );
 }
 

@@ -1,21 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { scrollToCardsSection } from "@/lib/cards-nav-scroll";
 
 const SECTIONS = [
-  { id: "overview", label: "Overview" },
-  { id: "genre-wheel", label: "Wheel" },
-  { id: "genre-transitions", label: "Transitions" },
-  { id: "genre-mashup", label: "Mashup" },
-  { id: "world-genres", label: "World" },
-  { id: "genre-intensity", label: "Intensity" },
-  { id: "genre-themes", label: "Themes" },
-  { id: "associations", label: "Associations" },
+  { id: "remix-anatomy", label: "Anatomy" },
+  { id: "remix-by-genre", label: "By Genre" },
 ] as const;
 
-export default function GenreSubTabs() {
-  const [active, setActive] = useState("overview");
+type Props = { stickToTop?: boolean };
+
+export default function RemixesSubTabs({ stickToTop = true }: Props) {
+  const [active, setActive] = useState("remix-anatomy");
 
   useEffect(() => {
     const observers = SECTIONS.map(({ id }) => {
@@ -34,7 +31,14 @@ export default function GenreSubTabs() {
   }, []);
 
   return (
-    <nav className="sticky top-[56px] z-40 bg-bg/90 backdrop-blur-sm border-b border-ui-border">
+    <nav
+      className={[
+        stickToTop
+          ? "sticky top-[56px] z-40 border-b border-ui-border"
+          : "border-0",
+        "bg-bg/90 backdrop-blur-sm",
+      ].join(" ")}
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center gap-0 -mx-1 overflow-x-auto [&::-webkit-scrollbar]:h-0">
           {SECTIONS.map(({ id, label }) => (
