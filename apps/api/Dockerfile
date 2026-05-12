@@ -11,6 +11,7 @@ COPY packages/cards-domain packages/cards-domain
 COPY apps/api apps/api
 RUN pnpm --filter api exec prisma generate
 RUN pnpm --filter api build
+RUN cd apps/api && ./node_modules/.bin/tsc --skipLibCheck --esModuleInterop --module commonjs --target ES2021 --experimentalDecorators --emitDecoratorMetadata --outDir dist --rootDir . prisma/seed.ts
 # Portable prod tree: own node_modules + dist (no reliance on monorepo path layout). --legacy: workspace without injectWorkspacePackages.
 # Regenerate client inside the deploy tree: `pnpm deploy` can omit hoisted `node_modules/.prisma` from the monorepo, causing
 # `Cannot find module '.prisma/client/default'` at runtime when `migrate deploy` succeeds but Nest loads `@prisma/client`.
