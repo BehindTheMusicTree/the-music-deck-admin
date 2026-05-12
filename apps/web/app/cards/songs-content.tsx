@@ -293,7 +293,7 @@ export async function CardsSongsContent() {
       border:
         "Border and full theme always come from the region theme (same rule as country-subgenre).",
       card: findShippedCard(shipped, 77),
-      theme: worldThemeForCountry("Bretagne"),
+      theme: worldThemeForCountry("Britany"),
     },
     {
       key: "country-plus-genre",
@@ -322,7 +322,7 @@ export async function CardsSongsContent() {
       border:
         "No border — artwork fills the card edge-to-edge. UI bands (Genre strip, ability, stats, footer) stay inset as in normal mode.",
       card: findShippedCard(shipped, 26),
-      theme: worldThemeForCountry("Bretagne"),
+      theme: worldThemeForCountry("Britany"),
     },
   ];
 

@@ -1,7 +1,7 @@
 import type { CardData } from "@repo/cards-domain";
 import { COUNTRY_NATIVE_SUBGENRES } from "../country-native-subgenres";
 import { ALGERIA_CARDS } from "./algeria";
-import { BRETAGNE_CARDS } from "./bretagne";
+import { BRITANY_CARDS } from "./britany";
 import { FRANCE_CARDS } from "./france";
 import { GERMANY_CARDS } from "./germany";
 import { ITALY_CARDS } from "./italy";
@@ -17,7 +17,7 @@ import { USA_CARDS } from "./usa";
 const ALL_WORLD_CARDS: CardData[] = [
   ...USA_CARDS,
   ...FRANCE_CARDS,
-  ...BRETAGNE_CARDS,
+  ...BRITANY_CARDS,
   ...SPAIN_CARDS,
   ...MEXICO_CARDS,
   ...ALGERIA_CARDS,

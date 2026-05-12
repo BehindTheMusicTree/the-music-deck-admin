@@ -47,11 +47,11 @@ describe("resolveThemeSelection", () => {
   it("country-native: subgenre on right — mirror country pips", () => {
     const r = resolveThemeSelection({
       genre: "Folk Breton",
-      country: "Bretagne",
+      country: "Britany",
     });
     expect(r.selectionKind).toBe("country-native");
     expect(r.mirrorCountryTypeStripRight).toBe(true);
-    expect(r.leftLabel).toBe("Bretagne");
+    expect(r.leftLabel).toBe("Britany");
     expect(r.rightLabel).toBe("Folk Breton");
   });
 

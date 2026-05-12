@@ -1,7 +1,7 @@
 import type { CardData } from "@repo/cards-domain";
 import { ART, ARTWORK_CREATED_AT, artworkPromptFor } from "../_card-helpers";
 
-export const BRETAGNE_CARDS: CardData[] = [
+export const BRITANY_CARDS: CardData[] = [
   {
     catalogNumber: 1,
     id: 26,
@@ -13,7 +13,7 @@ export const BRETAGNE_CARDS: CardData[] = [
     abilityDesc: "Gain +10 power for each allied World card in play.",
     pop: 6,
     rarity: "BANGER",
-    country: "Bretagne",
+    country: "Britany",
     artwork: `${ART}artwork.tri-martolod-v1.png`,
     artworkOffsetY: -25,
     artworkOverBorder: true,
@@ -25,7 +25,7 @@ export const BRETAGNE_CARDS: CardData[] = [
     title: "La Tribu de Dana",
     artist: "Manau",
     year: "1998",
-    country: "Bretagne",
+    country: "Britany",
     genre: "Rap",
     ability: "Reserve",
     abilityDesc: "Shipped catalogue entry.",
@@ -43,7 +43,7 @@ export const BRETAGNE_CARDS: CardData[] = [
     artist: "Traditional",
     year: "1897",
     genre: "Folk Breton",
-    country: "Bretagne",
+    country: "Britany",
     ability: "Reserve",
     abilityDesc: "Shipped catalogue entry.",
     pop: 6,

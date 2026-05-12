@@ -45,7 +45,7 @@ export const SUBGENRES: Subgenre[] = [
     intensity: "SOFT",
   },
   { kind: "country", n: "French Folk", parentA: "France", intensity: "SOFT" },
-  { kind: "country", n: "Folk Breton", parentA: "Bretagne", intensity: "SOFT" },
+  { kind: "country", n: "Folk Breton", parentA: "Britany", intensity: "SOFT" },
   { kind: "country", n: "Flamenco", parentA: "Spain", intensity: "SOFT" },
   {
     kind: "country",

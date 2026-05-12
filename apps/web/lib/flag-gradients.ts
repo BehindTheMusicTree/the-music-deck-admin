@@ -76,6 +76,6 @@ export function cssJapanHinomaru(): string {
 }
 
 /** Gwenn-ha-Du–style horizontal stripes. */
-export function cssBretagneRepeating(): string {
+export function cssBritanyRepeating(): string {
   return "repeating-linear-gradient(to bottom, #000000 0%, #000000 9.09%, #ffffff 9.09%, #ffffff 18.18%)";
 }

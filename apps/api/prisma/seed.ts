@@ -10,13 +10,15 @@ function persistedArtist(value: string | undefined | null): string | null {
 import {
   APP_GENRE_NAMES,
   assignCatalogRowKeys,
-  formatPrintedSetId,
   printedTypeCodeForSongCard,
-  printedTypeCodeForTransitionGenre,
-  PRINTED_DEFAULT_SEASON,
   type CardData,
   type WishlistCardDef,
 } from "@repo/cards-domain";
+import {
+  formatPrintedSetId,
+  printedTypeCodeForTransitionGenre,
+  PRINTED_DEFAULT_SEASON,
+} from "./seed-data/type-codes";
 import { seedGenres } from "./seed-data/genre-taxonomy";
 import { ALL_GENRE_CARDS } from "./seed-data/genre";
 import { WORLD_FLAG_CARDS, WORLD_MIXED_CARDS } from "./seed-data/world";

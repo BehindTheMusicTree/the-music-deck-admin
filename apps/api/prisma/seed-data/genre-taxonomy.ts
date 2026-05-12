@@ -1,11 +1,10 @@
 import {
   APP_GENRE_NAMES,
   APP_GENRE_THEMES,
-  ROOT_GENRE_PRINTED_TYPE_CODE,
   SUBGENRES,
-  TERRITORY_PRINTED_TYPE_CODE,
   type RootGenreName,
 } from "@repo/cards-domain";
+import { ROOT_GENRE_PRINTED_TYPE_CODE, TERRITORY_PRINTED_TYPE_CODE } from "./type-codes";
 import { Intensity, Prisma, type PrismaClient } from "@prisma/client";
 
 const WHEEL_ORDER = [
