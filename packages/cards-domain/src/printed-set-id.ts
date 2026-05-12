@@ -256,7 +256,7 @@ export const TERRITORY_PRINTED_TYPE_CODE: Record<string, string> = {
 
   // Sub-national regions
   England: "EN",
-  Scotland: "SC",
+  Scotland: "XS",
   // FR subdivision
   Brittany: "XB",
   Corsica: "XC",
