@@ -34,6 +34,7 @@ jobs:
           TMD_ADMIN_S3_ENDPOINT: ${{ vars.TMD_ADMIN_S3_ENDPOINT }}
           TMD_ADMIN_R2_ACCESS_KEY_ID: ${{ secrets.TMD_ADMIN_R2_ACCESS_KEY_ID }}
           TMD_ADMIN_R2_SECRET_ACCESS_KEY: ${{ secrets.TMD_ADMIN_R2_SECRET_ACCESS_KEY }}
+          ADMIN_API_TOKEN: ${{ secrets.ADMIN_API_TOKEN }}
         run: |
           set -euo pipefail
           : > fragment.env
@@ -42,6 +43,7 @@ jobs:
             SERVER_DEPLOY_USERNAME SERVER_DEPLOY_SSH_PRIVATE_KEY
             TMD_ADMIN_S3_PUBLIC_BASE_URL TMD_ADMIN_S3_ENDPOINT
             TMD_ADMIN_R2_ACCESS_KEY_ID TMD_ADMIN_R2_SECRET_ACCESS_KEY
+            ADMIN_API_TOKEN
           )
           missing=()
           for v in "${required[@]}"; do
@@ -58,6 +60,7 @@ jobs:
           ak="$(printf '%s' "${TMD_ADMIN_R2_ACCESS_KEY_ID}" | tr -d '\n\r')"
           sk="$(printf '%s' "${TMD_ADMIN_R2_SECRET_ACCESS_KEY}" | tr -d '\n\r')"
           printf '%s\n' "S3_ACCESS_KEY_ID=${ak}" "S3_SECRET_ACCESS_KEY=${sk}" >> fragment.env
+          printf 'ADMIN_API_TOKEN=%s\n' "$(printf '%s' "${ADMIN_API_TOKEN}" | tr -d '\n\r')" >> fragment.env
           echo "API fragment ready for staging."
 
       - name: Upload API fragment artifact
@@ -161,6 +164,7 @@ jobs:
           TMD_ADMIN_S3_ENDPOINT: ${{ vars.TMD_ADMIN_S3_ENDPOINT }}
           TMD_ADMIN_R2_ACCESS_KEY_ID: ${{ secrets.TMD_ADMIN_R2_ACCESS_KEY_ID }}
           TMD_ADMIN_R2_SECRET_ACCESS_KEY: ${{ secrets.TMD_ADMIN_R2_SECRET_ACCESS_KEY }}
+          ADMIN_API_TOKEN: ${{ secrets.ADMIN_API_TOKEN }}
         run: |
           set -euo pipefail
           : > fragment.env
@@ -169,6 +173,7 @@ jobs:
             SERVER_DEPLOY_USERNAME SERVER_DEPLOY_SSH_PRIVATE_KEY
             TMD_ADMIN_S3_PUBLIC_BASE_URL TMD_ADMIN_S3_ENDPOINT
             TMD_ADMIN_R2_ACCESS_KEY_ID TMD_ADMIN_R2_SECRET_ACCESS_KEY
+            ADMIN_API_TOKEN
           )
           missing=()
           for v in "${required[@]}"; do
@@ -185,6 +190,7 @@ jobs:
           ak="$(printf '%s' "${TMD_ADMIN_R2_ACCESS_KEY_ID}" | tr -d '\n\r')"
           sk="$(printf '%s' "${TMD_ADMIN_R2_SECRET_ACCESS_KEY}" | tr -d '\n\r')"
           printf '%s\n' "S3_ACCESS_KEY_ID=${ak}" "S3_SECRET_ACCESS_KEY=${sk}" >> fragment.env
+          printf 'ADMIN_API_TOKEN=%s\n' "$(printf '%s' "${ADMIN_API_TOKEN}" | tr -d '\n\r')" >> fragment.env
           echo "API fragment ready for prod."
 
       - name: Upload API fragment artifact
