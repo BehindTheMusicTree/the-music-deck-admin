@@ -245,52 +245,56 @@ function BattlesOverview() {
 function BattlesAudio() {
   const [audioTab, setAudioTab] = useState<"overview" | "library" | "upload">("overview");
   return (
-    <div className="min-h-[calc(100vh-56px)] bg-bg px-6 py-12 sm:py-[60px] max-w-4xl mx-auto">
-      <div className="page-kicker mb-4">Game</div>
-      <h1 className="font-cinzel text-3xl font-bold tracking-[4px] text-white mb-3">
-        Battles — Audio
-      </h1>
-      <p className="font-garamond italic text-muted mb-8 max-w-[660px]">
-        Battle audio specification for production and runtime only. This section
-        is internal tooling for the game designer, not player-facing UX.
-      </p>
+    <div className="min-h-[calc(100vh-56px)] bg-bg">
+      <div className="px-6 pt-12 sm:pt-[60px] max-w-4xl mx-auto">
+        <div className="page-kicker mb-4">Game</div>
+        <h1 className="font-cinzel text-3xl font-bold tracking-[4px] text-white mb-3">
+          Battles — Audio
+        </h1>
+        <p className="font-garamond italic text-muted mb-8 max-w-[660px]">
+          Battle audio specification for production and runtime only. This section
+          is internal tooling for the game designer, not player-facing UX.
+        </p>
 
-      <nav className="mb-8 border-b border-ui-border/70">
-        <div className="flex items-center gap-1 -mx-1 overflow-x-auto [&::-webkit-scrollbar]:h-0">
-          {[
-            { id: "overview", label: "Overview" },
-            { id: "library", label: "Library" },
-            { id: "upload", label: "Upload" },
-          ].map(({ id, label }) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => setAudioTab(id as "overview" | "library" | "upload")}
-              className={[
-                "tab-font-13 whitespace-nowrap font-mono tracking-[0.12em] px-2.5 sm:px-3 py-2 no-underline border-b-2 -mb-px transition-colors",
-                audioTab === id
-                  ? "text-gold border-gold"
-                  : "text-muted border-transparent hover:text-white hover:border-ui-border",
-              ].join(" ")}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </nav>
+        <nav className="mb-8 border-b border-ui-border/70">
+          <div className="flex items-center gap-1 -mx-1 overflow-x-auto [&::-webkit-scrollbar]:h-0">
+            {[
+              { id: "overview", label: "Overview" },
+              { id: "library", label: "Library" },
+              { id: "upload", label: "Upload" },
+            ].map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setAudioTab(id as "overview" | "library" | "upload")}
+                className={[
+                  "tab-font-13 whitespace-nowrap font-mono tracking-[0.12em] px-2.5 sm:px-3 py-2 no-underline border-b-2 -mb-px transition-colors",
+                  audioTab === id
+                    ? "text-gold border-gold"
+                    : "text-muted border-transparent hover:text-white hover:border-ui-border",
+                ].join(" ")}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </nav>
+      </div>
 
       {audioTab === "upload" ? (
-        <section className="max-w-[760px]">
-          <h2 className="section-title mb-4">Upload battle audio</h2>
-          <p className="font-garamond text-muted mb-6">
-            Upload an MP3 to S3. The token must match the slug used by the
-            game client (e.g. <span className="font-mono text-white/70">genre-rock--intensity-experimental</span>).
-            Version 1 is the default; use higher versions for alternate takes.
-          </p>
-          <BattleAudioUploadForm />
-        </section>
+        <div className="px-6 pb-12 sm:pb-[60px] max-w-4xl mx-auto">
+          <section className="max-w-[760px]">
+            <h2 className="section-title mb-4">Upload battle audio</h2>
+            <p className="font-garamond text-muted mb-6">
+              Upload an MP3 to S3. The token must match the slug used by the
+              game client (e.g. <span className="font-mono text-white/70">genre-rock--intensity-experimental</span>).
+              Version 1 is the default; use higher versions for alternate takes.
+            </p>
+            <BattleAudioUploadForm />
+          </section>
+        </div>
       ) : audioTab === "overview" ? (
-        <>
+        <div className="px-6 pb-12 sm:pb-[60px] max-w-4xl mx-auto">
           <section className="mb-10 max-w-[760px]">
             <h2 className="section-title mb-2">1) Battle audio strategy</h2>
             <ul className="font-garamond text-muted leading-normal m-0 pl-5 space-y-1.5">
@@ -363,9 +367,11 @@ function BattlesAudio() {
           <section className="max-w-[760px]">
             <BattleAudioPromptBuilder />
           </section>
-        </>
+        </div>
       ) : (
-        <BattleAudioLibrary />
+        <div className="px-6 pb-12 sm:pb-[60px]">
+          <BattleAudioLibrary />
+        </div>
       )}
     </div>
   );

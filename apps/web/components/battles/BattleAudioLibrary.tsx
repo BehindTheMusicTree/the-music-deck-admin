@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { COUNTRY_DATA } from "@/lib/countries";
 import { genreIntensityPromptTextOrEmpty } from "@/lib/battle-audio-element-prompts";
 import { GENRE_NAMES, type Intensity } from "@/lib/genres";
+import BattleAudioCircle from "./BattleAudioCircle";
 
 type SingleKind = "genreIntensity" | "country";
 type SortDir = "asc" | "desc";
@@ -18,6 +19,7 @@ type SingleRow = {
   prompt: string;
   fileSizeMb: number | null;
   durationMin: number | null;
+  version: number | null;
 };
 
 type ComboRow = {
@@ -51,7 +53,7 @@ function slugify(value: string): string {
 }
 
 function tokenForGenreIntensity(genre: string, intensity: string): string {
-  return `genre-${slugify(genre)}--intensity-${intensity}`;
+  return `genre-${slugify(genre)}--intensity-${intensity.toLowerCase()}`;
 }
 
 function tokenForCountry(country: string): string {
@@ -73,6 +75,7 @@ function buildSingles(): SingleRow[] {
         prompt: genreIntensityPromptTextOrEmpty(genre, intensity),
         fileSizeMb: null,
         durationMin: null,
+        version: null,
       });
     }
   }
@@ -89,6 +92,7 @@ function buildSingles(): SingleRow[] {
       prompt: "",
       fileSizeMb: null,
       durationMin: null,
+      version: null,
     });
   }
   return rows;
@@ -118,7 +122,7 @@ function buildCombinations(singles: SingleRow[]): ComboRow[] {
 }
 
 /** Build a map from token → best metadata (highest version wins). */
-function buildMetaMap(audioList: AudioMeta[]): Map<string, { bytes: number; durationSec: number | null }> {
+function buildMetaMap(audioList: AudioMeta[]): Map<string, { bytes: number; durationSec: number | null; version: number }> {
   const map = new Map<string, { bytes: number; durationSec: number | null; version: number }>();
   for (const a of audioList) {
     const existing = map.get(a.token);
@@ -150,6 +154,7 @@ export default function BattleAudioLibrary() {
         ...row,
         fileSizeMb: meta.bytes / (1024 * 1024),
         durationMin: meta.durationSec != null ? meta.durationSec / 60 : null,
+        version: meta.version,
       };
     }),
     [baseSingles, metaMap],
@@ -309,12 +314,16 @@ export default function BattleAudioLibrary() {
   const visibleMin = singlesTotalMin + combosTotalMin;
 
   return (
-    <section className="max-w-[1100px]">
+    <section className="w-full">
       <h2 className="section-title mb-2">Library</h2>
       <p className="font-garamond text-muted mb-6">
         Required battle music inventory with filters and ordering in table
         headers.
       </p>
+
+      <div className="mb-10">
+        <BattleAudioCircle singles={singles} />
+      </div>
 
       <div className="mb-10">
         <div className="font-cinzel text-[12px] tracking-[0.12em] text-gold mb-2">
@@ -326,7 +335,7 @@ export default function BattleAudioLibrary() {
               <tr className="font-mono text-[11px] tracking-[0.08em] text-muted">
                 <th className="px-3 py-2">scope</th>
                 <th className="px-3 py-2">
-                  music count (visible / total needed)
+                  audio uploaded / needed
                 </th>
                 <th className="px-3 py-2">total weight (MB)</th>
                 <th className="px-3 py-2">total duration (min)</th>
@@ -336,43 +345,37 @@ export default function BattleAudioLibrary() {
               <tr className="border-b border-ui-border/30">
                 <td className="px-3 py-2">Singles</td>
                 <td className="px-3 py-2">
-                  {filteredSingles.length} / {singles.length}
+                  {singlesKnownSizeCount} / {singles.length}
                 </td>
                 <td className="px-3 py-2">
-                  {singlesTotalMb.toFixed(1)} (known {singlesKnownSizeCount}/
-                  {filteredSingles.length})
+                  {singlesTotalMb.toFixed(1)}
                 </td>
                 <td className="px-3 py-2">
-                  {singlesTotalMin.toFixed(1)} (known{" "}
-                  {singlesKnownDurationCount}/{filteredSingles.length})
+                  {singlesKnownDurationCount > 0 ? singlesTotalMin.toFixed(1) : "—"}
                 </td>
               </tr>
               <tr className="border-b border-ui-border/30">
                 <td className="px-3 py-2">2-combinations</td>
                 <td className="px-3 py-2">
-                  {filteredCombos.length} / {combos.length}
+                  {combosKnownSizeCount} / {combos.length}
                 </td>
                 <td className="px-3 py-2">
-                  {combosTotalMb.toFixed(1)} (known {combosKnownSizeCount}/
-                  {filteredCombos.length})
+                  {combosTotalMb.toFixed(1)}
                 </td>
                 <td className="px-3 py-2">
-                  {combosTotalMin.toFixed(1)} (known {combosKnownDurationCount}/
-                  {filteredCombos.length})
+                  {combosKnownDurationCount > 0 ? combosTotalMin.toFixed(1) : "—"}
                 </td>
               </tr>
               <tr>
                 <td className="px-3 py-2">Total</td>
                 <td className="px-3 py-2">
-                  {visibleSongs} / {totalNeededSongs}
+                  {totalKnownSizeCount} / {totalNeededSongs}
                 </td>
                 <td className="px-3 py-2">
-                  {visibleMb.toFixed(1)} (known {totalKnownSizeCount}/
-                  {visibleSongs})
+                  {visibleMb.toFixed(1)}
                 </td>
                 <td className="px-3 py-2">
-                  {visibleMin.toFixed(1)} (known {totalKnownDurationCount}/
-                  {visibleSongs})
+                  {totalKnownDurationCount > 0 ? visibleMin.toFixed(1) : "—"}
                 </td>
               </tr>
             </tbody>
