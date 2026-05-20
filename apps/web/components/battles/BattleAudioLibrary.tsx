@@ -5,6 +5,7 @@ import { COUNTRY_DATA } from "@/lib/countries";
 import { genreIntensityPromptTextOrEmpty } from "@/lib/battle-audio-element-prompts";
 import { GENRE_NAMES, type Intensity } from "@/lib/genres";
 import BattleAudioCircle from "./BattleAudioCircle";
+import BattleAudioCountryGrid from "./BattleAudioCountryGrid";
 
 type SingleKind = "genreIntensity" | "country";
 type SortDir = "asc" | "desc";
@@ -294,21 +295,29 @@ export default function BattleAudioLibrary() {
   );
 
   const totalNeededSongs = singles.length + combos.length;
-  const singlesKnownSizeCount = filteredSingles.filter(
-    (r) => r.fileSizeMb != null,
-  ).length;
-  const singlesKnownDurationCount = filteredSingles.filter(
-    (r) => r.durationMin != null,
-  ).length;
-  const combosKnownSizeCount = filteredCombos.filter(
-    (r) => r.fileSizeMb != null,
-  ).length;
-  const combosKnownDurationCount = filteredCombos.filter(
-    (r) => r.durationMin != null,
-  ).length;
+
+  // Singles split: genre-intensity vs country
+  const singlesGenres    = singles.filter((r) => r.kind === "genreIntensity");
+  const singlesCountries = singles.filter((r) => r.kind === "country");
+  const filteredGenreSingles   = filteredSingles.filter((r) => r.kind === "genreIntensity");
+  const filteredCountrySingles = filteredSingles.filter((r) => r.kind === "country");
+
+  const genreSinglesTotalMb  = filteredGenreSingles.reduce((s, r) => s + (r.fileSizeMb ?? 0), 0);
+  const countrySinglesTotalMb = filteredCountrySingles.reduce((s, r) => s + (r.fileSizeMb ?? 0), 0);
+  const genreSinglesTotalMin  = filteredGenreSingles.reduce((s, r) => s + (r.durationMin ?? 0), 0);
+  const countrySinglesTotalMin = filteredCountrySingles.reduce((s, r) => s + (r.durationMin ?? 0), 0);
+
+  const genreKnownSize    = filteredGenreSingles.filter((r) => r.fileSizeMb != null).length;
+  const countryKnownSize  = filteredCountrySingles.filter((r) => r.fileSizeMb != null).length;
+  const genreKnownDur     = filteredGenreSingles.filter((r) => r.durationMin != null).length;
+  const countryKnownDur   = filteredCountrySingles.filter((r) => r.durationMin != null).length;
+
+  const singlesKnownSizeCount = genreKnownSize + countryKnownSize;
+  const singlesKnownDurationCount = genreKnownDur + countryKnownDur;
+  const combosKnownSizeCount = filteredCombos.filter((r) => r.fileSizeMb != null).length;
+  const combosKnownDurationCount = filteredCombos.filter((r) => r.durationMin != null).length;
   const totalKnownSizeCount = singlesKnownSizeCount + combosKnownSizeCount;
-  const totalKnownDurationCount =
-    singlesKnownDurationCount + combosKnownDurationCount;
+  const totalKnownDurationCount = singlesKnownDurationCount + combosKnownDurationCount;
   const visibleSongs = filteredSingles.length + filteredCombos.length;
   const visibleMb = singlesTotalMb + combosTotalMb;
   const visibleMin = singlesTotalMin + combosTotalMin;
@@ -323,6 +332,10 @@ export default function BattleAudioLibrary() {
 
       <div className="mb-10">
         <BattleAudioCircle singles={singles} />
+      </div>
+
+      <div className="mb-10">
+        <BattleAudioCountryGrid singles={singles} />
       </div>
 
       <div className="mb-10">
@@ -342,41 +355,29 @@ export default function BattleAudioLibrary() {
               </tr>
             </thead>
             <tbody className="font-garamond text-sm text-white/90">
+              <tr className="border-b border-ui-border/10">
+                <td className="px-3 py-1.5 text-muted/60 text-xs pl-5">Singles — Genres</td>
+                <td className="px-3 py-1.5 text-muted/70 text-xs">{genreKnownSize} / {singlesGenres.length}</td>
+                <td className="px-3 py-1.5 text-muted/70 text-xs">{genreSinglesTotalMb.toFixed(1)}</td>
+                <td className="px-3 py-1.5 text-muted/70 text-xs">{genreKnownDur > 0 ? genreSinglesTotalMin.toFixed(1) : "—"}</td>
+              </tr>
               <tr className="border-b border-ui-border/30">
-                <td className="px-3 py-2">Singles</td>
-                <td className="px-3 py-2">
-                  {singlesKnownSizeCount} / {singles.length}
-                </td>
-                <td className="px-3 py-2">
-                  {singlesTotalMb.toFixed(1)}
-                </td>
-                <td className="px-3 py-2">
-                  {singlesKnownDurationCount > 0 ? singlesTotalMin.toFixed(1) : "—"}
-                </td>
+                <td className="px-3 py-1.5 text-muted/60 text-xs pl-5">Singles — Countries</td>
+                <td className="px-3 py-1.5 text-muted/70 text-xs">{countryKnownSize} / {singlesCountries.length}</td>
+                <td className="px-3 py-1.5 text-muted/70 text-xs">{countrySinglesTotalMb.toFixed(1)}</td>
+                <td className="px-3 py-1.5 text-muted/70 text-xs">{countryKnownDur > 0 ? countrySinglesTotalMin.toFixed(1) : "—"}</td>
               </tr>
               <tr className="border-b border-ui-border/30">
                 <td className="px-3 py-2">2-combinations</td>
-                <td className="px-3 py-2">
-                  {combosKnownSizeCount} / {combos.length}
-                </td>
-                <td className="px-3 py-2">
-                  {combosTotalMb.toFixed(1)}
-                </td>
-                <td className="px-3 py-2">
-                  {combosKnownDurationCount > 0 ? combosTotalMin.toFixed(1) : "—"}
-                </td>
+                <td className="px-3 py-2">{combosKnownSizeCount} / {combos.length}</td>
+                <td className="px-3 py-2">{combosTotalMb.toFixed(1)}</td>
+                <td className="px-3 py-2">{combosKnownDurationCount > 0 ? combosTotalMin.toFixed(1) : "—"}</td>
               </tr>
               <tr>
                 <td className="px-3 py-2">Total</td>
-                <td className="px-3 py-2">
-                  {totalKnownSizeCount} / {totalNeededSongs}
-                </td>
-                <td className="px-3 py-2">
-                  {visibleMb.toFixed(1)}
-                </td>
-                <td className="px-3 py-2">
-                  {totalKnownDurationCount > 0 ? visibleMin.toFixed(1) : "—"}
-                </td>
+                <td className="px-3 py-2">{totalKnownSizeCount} / {totalNeededSongs}</td>
+                <td className="px-3 py-2">{visibleMb.toFixed(1)}</td>
+                <td className="px-3 py-2">{totalKnownDurationCount > 0 ? visibleMin.toFixed(1) : "—"}</td>
               </tr>
             </tbody>
           </table>

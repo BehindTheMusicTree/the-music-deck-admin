@@ -27,11 +27,8 @@ const R_POP_OUT    = 84;   // POP ring outer / SOFT inner
 const R_SOFT_OUT   = 124;  // SOFT outer / EXPERIMENTAL inner
 const R_EXP_OUT    = 165;  // EXPERIMENTAL outer / HARDCORE inner
 const R_HC_OUT     = 208;  // HARDCORE outer
-const R_CTY_IN     = 213;  // Country ring inner
-const R_CTY_OUT    = 234;  // Country ring outer
 
 const GENRE_SLICE_GAP = 1.5; // degrees between genre slices
-const COUNTRY_GAP     = 0.6; // degrees between country sectors
 
 // The 7 non-Mainstream genres in wheel order
 const WHEEL_GENRE_NAMES = WHEEL_GENRES.map((g) => g.n) as NonMainstreamGenreName[];
@@ -115,12 +112,6 @@ export default function BattleAudioCircle({ singles }: { singles: CircleSingle[]
       .map((s) => [`${s.genre}|${s.intensity}`, s]),
   );
   const mainstream = singles.find((s) => s.genre === "Mainstream") ?? null;
-  const countrySingles = singles.filter((s) => s.kind === "country");
-
-  const numCountries = countrySingles.length;
-  const countrySectorSpan = numCountries > 0
-    ? (360 - numCountries * COUNTRY_GAP) / numCountries
-    : 0;
 
   const selected = selectedKey != null ? (byKey.get(selectedKey) ?? null) : null;
 
@@ -223,21 +214,6 @@ export default function BattleAudioCircle({ singles }: { singles: CircleSingle[]
             </circle>
           );
         })()}
-
-        {/* ── country outer ring ── */}
-        {countrySingles.map((row, ci) => {
-          const start = -90 + ci * (countrySectorSpan + COUNTRY_GAP);
-          const end   = start + countrySectorSpan;
-          return (
-            <path
-              key={row.key}
-              d={sectorPath(CX, CY, R_CTY_IN, R_CTY_OUT, start, end)}
-              {...cellProps(row)}
-            >
-              <title>{row.label}{row.fileSizeMb != null ? ` · ${row.fileSizeMb.toFixed(1)} MB` : " · no audio"}</title>
-            </path>
-          );
-        })}
 
         {/* ── center label ── */}
         <text
