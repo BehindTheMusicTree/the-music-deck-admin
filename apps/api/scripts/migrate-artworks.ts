@@ -82,7 +82,7 @@ async function main(): Promise<void> {
   let orphaned = 0;
 
   for (const filename of files) {
-    const key = `deck/${filename}`;
+    const key = `card-artworks/${filename}`;
     const cardRow = await prisma.card.findFirst({
       where: { artworkKey: key, kind: "SONG" },
     });

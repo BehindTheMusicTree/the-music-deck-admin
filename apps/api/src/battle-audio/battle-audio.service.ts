@@ -63,7 +63,7 @@ export class BattleAudioService {
     if (!file.mimetype.startsWith("audio/")) {
       throw new BadRequestException("Only audio uploads are allowed");
     }
-    const key = `audio/battles/singles/${token}-v${version}.mp3`;
+    const key = `audio/battle/singles/${token}-v${version}.mp3`;
     const sha = createHash("sha256").update(file.buffer).digest("hex");
 
     const existing = await this.prisma.battleAudio.findUnique({

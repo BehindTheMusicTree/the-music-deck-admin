@@ -90,7 +90,7 @@ async function main(): Promise<void> {
       continue;
     }
     const { token, version } = parsed;
-    const key = `audio/battles/singles/${token}-v${version}.mp3`;
+    const key = `audio/battle/singles/${token}-v${version}.mp3`;
     const filePath = join(singlesDir, filename);
     const bytes = statSync(filePath).size;
     const sha = await sha256File(filePath);

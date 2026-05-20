@@ -539,7 +539,7 @@ export class CardsService {
       throw new BadRequestException("Only image uploads are allowed");
     }
     const deckBasename = safeDeckBasename(file.originalname ?? "", id);
-    const key = `deck/${deckBasename}`;
+    const key = `card-artworks/${deckBasename}`;
     const sha = createHash("sha256").update(file.buffer).digest("hex");
     const existing = await this.prisma.songCard.findUnique({
       where: { id },
