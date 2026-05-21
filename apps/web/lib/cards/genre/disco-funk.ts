@@ -12,8 +12,8 @@ export const DISCO_FUNK_CARDS: CardData[] = [
     abilityDesc: "Boosts all Funk cards on the field by +5 popularity.",
     pop: 9,
     rarity: "BANGER",
-    artwork: `${ART}artwork.night-fever-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.night-fever-v1.png"],
+    artwork: `${ART}night-fever-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["night-fever-v1.png"],
   },
   {
     catalogNumber: 4,
@@ -25,8 +25,8 @@ export const DISCO_FUNK_CARDS: CardData[] = [
     abilityDesc: "Gains +10 popularity when played after a dance track.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.billy-jean-v2.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.billy-jean-v2.png"],
+    artwork: `${ART}billy-jean-v2.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["billy-jean-v2.png"],
   },
   {
     catalogNumber: 5,
@@ -38,9 +38,9 @@ export const DISCO_FUNK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.michael-jackson-thriller-v1.png`,
+    artwork: `${ART}michael-jackson-thriller-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.michael-jackson-thriller-v1.png"],
+      ARTWORK_CREATED_AT["michael-jackson-thriller-v1.png"],
     ...(artworkPromptFor(47) ?? {}),
   },
   {
@@ -55,8 +55,8 @@ export const DISCO_FUNK_CARDS: CardData[] = [
     artworkOffsetY: -25,
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.isaac-hays-shaft-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.isaac-hays-shaft-v1.png"],
+    artwork: `${ART}isaac-hays-shaft-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["isaac-hays-shaft-v1.png"],
     ...(artworkPromptFor(81) ?? {}),
   },
   {
@@ -70,9 +70,9 @@ export const DISCO_FUNK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.stevie-wonder-superstition-v1.png`,
+    artwork: `${ART}stevie-wonder-superstition-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.stevie-wonder-superstition-v1.png"],
+      ARTWORK_CREATED_AT["stevie-wonder-superstition-v1.png"],
     ...(artworkPromptFor(91) ?? {}),
   },
   {
@@ -86,9 +86,9 @@ export const DISCO_FUNK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.cola-bottle-baby-edwin-birdsong-v1.png`,
+    artwork: `${ART}cola-bottle-baby-edwin-birdsong-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.cola-bottle-baby-edwin-birdsong-v1.png"],
+      ARTWORK_CREATED_AT["cola-bottle-baby-edwin-birdsong-v1.png"],
     ...(artworkPromptFor(112) ?? {}),
   },
   {
@@ -101,9 +101,9 @@ export const DISCO_FUNK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.walter-murphy-a-fifth-of-beethoven-v1.png`,
+    artwork: `${ART}walter-murphy-a-fifth-of-beethoven-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.walter-murphy-a-fifth-of-beethoven-v1.png"],
+      ARTWORK_CREATED_AT["walter-murphy-a-fifth-of-beethoven-v1.png"],
     ...(artworkPromptFor(116) ?? {}),
   },
 ] as CardData[];
