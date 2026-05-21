@@ -14,9 +14,9 @@ export const VINTAGE_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.the-winstons-amen-brother-v1.png`,
+    artwork: `${ART}the-winstons-amen-brother-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.the-winstons-amen-brother-v1.png"],
+      ARTWORK_CREATED_AT["the-winstons-amen-brother-v1.png"],
     ...(artworkPromptFor(114) ?? {}),
   },
   {
@@ -30,8 +30,8 @@ export const VINTAGE_CARDS: CardData[] = [
     abilityDesc: "Random multiplier between ×1 and ×3 on each use.",
     pop: 5,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.miles-davis-so-what-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.miles-davis-so-what-v1.png"],
+    artwork: `${ART}miles-davis-so-what-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["miles-davis-so-what-v1.png"],
     ...(artworkPromptFor(8) ?? {}),
   },
   {
@@ -45,9 +45,9 @@ export const VINTAGE_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.these-boots-are-made-for-walkin-v1.png`,
+    artwork: `${ART}these-boots-are-made-for-walkin-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.these-boots-are-made-for-walkin-v1.png"],
+      ARTWORK_CREATED_AT["these-boots-are-made-for-walkin-v1.png"],
   },
   {
     catalogNumber: 5,
@@ -60,9 +60,9 @@ export const VINTAGE_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "BANGER",
-    artwork: `${ART}artwork.bella-ciao-casa-de-papel-v1.png`,
+    artwork: `${ART}bella-ciao-casa-de-papel-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.bella-ciao-casa-de-papel-v1.png"],
+      ARTWORK_CREATED_AT["bella-ciao-casa-de-papel-v1.png"],
     ...(artworkPromptFor(53) ?? {}),
   },
   {
@@ -76,9 +76,9 @@ export const VINTAGE_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.david-mccallum-the-edge-v1.png`,
+    artwork: `${ART}david-mccallum-the-edge-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.david-mccallum-the-edge-v1.png"],
+      ARTWORK_CREATED_AT["david-mccallum-the-edge-v1.png"],
     artworkOffsetY: -20,
   },
 ] as CardData[];
