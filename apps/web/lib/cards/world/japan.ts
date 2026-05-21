@@ -14,9 +14,9 @@ export const JAPAN_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "BANGER",
-    artwork: `${ART}artwork.teriyaki-boys-tokyo-drift-v1.png`,
+    artwork: `${ART}teriyaki-boys-tokyo-drift-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.teriyaki-boys-tokyo-drift-v1.png"],
+      ARTWORK_CREATED_AT["teriyaki-boys-tokyo-drift-v1.png"],
     ...(artworkPromptFor(96) ?? {}),
   },
 ];
