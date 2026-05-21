@@ -14,9 +14,9 @@ export const RUSSIA_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 7,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.ivan-larionov-kalinka-v1.png`,
+    artwork: `${ART}ivan-larionov-kalinka-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.ivan-larionov-kalinka-v1.png"],
+      ARTWORK_CREATED_AT["ivan-larionov-kalinka-v1.png"],
     ...(artworkPromptFor(98) ?? {}),
   },
   {
@@ -30,9 +30,9 @@ export const RUSSIA_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 7,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.red-army-choir-kalinka-v1.png`,
+    artwork: `${ART}red-army-choir-kalinka-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.red-army-choir-kalinka-v1.png"],
+      ARTWORK_CREATED_AT["red-army-choir-kalinka-v1.png"],
     ...(artworkPromptFor(99) ?? {}),
     catalogNumber: 2,
   },
