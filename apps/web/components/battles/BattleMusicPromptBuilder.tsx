@@ -9,7 +9,7 @@ import {
   type Intensity,
   type NonMainstreamGenreName,
 } from "@/lib/genres";
-import { battleAudioElementPromptBlock } from "@/lib/battle-audio-element-prompts";
+import { battleMusicElementPromptBlock } from "@/lib/battle-music-element-prompts";
 
 type SelectorId = "first" | "second";
 
@@ -107,7 +107,7 @@ function intensityDescriptor(i: Intensity): string {
 }
 
 function promptBlockForElement(el: BattleElement): PromptBlock {
-  const block = battleAudioElementPromptBlock(el);
+  const block = battleMusicElementPromptBlock(el);
   return {
     title: block.title,
     lines: [...block.lines] as PromptBlock["lines"],
@@ -159,7 +159,7 @@ function normalisePair(
   return { normalized, key };
 }
 
-export default function BattleAudioPromptBuilder() {
+export default function BattleMusicPromptBuilder() {
   const [firstElement, setFirstElement] = useState<BattleElement>({
     kind: "genreIntensity",
     genre: "Mainstream",

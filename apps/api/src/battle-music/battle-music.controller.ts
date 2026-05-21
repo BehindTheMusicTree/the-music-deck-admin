@@ -1,3 +1,4 @@
+/// <reference types="multer" />
 import {
   Controller,
   Delete,
@@ -24,19 +25,26 @@ import {
 } from "@nestjs/swagger";
 import type { Response } from "express";
 import { AdminAuthGuard } from "../auth/admin-auth.guard";
-import { BattleAudioDto } from "./battle-audio.dto";
-import { BattleAudioService } from "./battle-audio.service";
+import { BattleMusicCatalogDto, BattleMusicDto } from "./battle-music.dto";
+import { BattleMusicService } from "./battle-music.service";
 
-@ApiTags("battle-audio")
-@Controller("battle-audio")
-export class BattleAudioController {
-  constructor(private readonly battleAudio: BattleAudioService) {}
+@ApiTags("battle-music")
+@Controller("battle-music")
+export class BattleMusicController {
+  constructor(private readonly battleMusic: BattleMusicService) {}
+
+  @Get("catalog")
+  @ApiOperation({ summary: "Root genres and territories that need battle music singles" })
+  @ApiOkResponse({ type: BattleMusicCatalogDto })
+  catalog(): Promise<BattleMusicCatalogDto> {
+    return this.battleMusic.catalog();
+  }
 
   @Get()
-  @ApiOperation({ summary: "List all uploaded battle audio tracks" })
-  @ApiOkResponse({ type: [BattleAudioDto] })
-  list(): Promise<BattleAudioDto[]> {
-    return this.battleAudio.list();
+  @ApiOperation({ summary: "List all uploaded battle music tracks" })
+  @ApiOkResponse({ type: [BattleMusicDto] })
+  list(): Promise<BattleMusicDto[]> {
+    return this.battleMusic.list();
   }
 
   @Get(":token/audio")
@@ -50,7 +58,7 @@ export class BattleAudioController {
     @Res() res: Response,
   ): Promise<void> {
     const version = versionRaw != null ? Number(versionRaw) : 1;
-    const url = await this.battleAudio.resolveRedirectUrl(token, version);
+    const url = await this.battleMusic.resolveRedirectUrl(token, version);
     res.redirect(302, url);
   }
 
@@ -69,15 +77,15 @@ export class BattleAudioController {
     },
   })
   @ApiQuery({ name: "version", required: false, type: Number })
-  @ApiOperation({ summary: "Upload/replace battle audio file to object storage" })
-  @ApiOkResponse({ type: BattleAudioDto })
+  @ApiOperation({ summary: "Upload/replace battle music file to object storage" })
+  @ApiOkResponse({ type: BattleMusicDto })
   upload(
     @Param("token") token: string,
     @Query("version") versionRaw: string | undefined,
     @UploadedFile() file: Express.Multer.File,
-  ): Promise<BattleAudioDto> {
+  ): Promise<BattleMusicDto> {
     const version = versionRaw != null ? Number(versionRaw) : 1;
-    return this.battleAudio.uploadAudioFile(token, version, file);
+    return this.battleMusic.uploadAudioFile(token, version, file);
   }
 
   @Delete(":token")
@@ -91,6 +99,6 @@ export class BattleAudioController {
     @Query("version") versionRaw: string | undefined,
   ): Promise<void> {
     const version = versionRaw != null ? Number(versionRaw) : 1;
-    await this.battleAudio.deleteAudio(token, version);
+    await this.battleMusic.deleteAudio(token, version);
   }
 }

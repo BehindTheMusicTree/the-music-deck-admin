@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { COUNTRY_DATA } from "@/lib/countries";
 
 type CircleSingle = {
   key: string;
@@ -15,11 +14,7 @@ type CircleSingle = {
   version: number | null;
 };
 
-const REGION_KEYS = new Set(["England", "Britany"]);
-
-function countryColor(name: string): string {
-  return COUNTRY_DATA[name]?.theme.border ?? "#8890b8";
-}
+const COLOR = "#7a7fa0";
 
 function LetterGroup({
   letter,
@@ -40,7 +35,6 @@ function LetterGroup({
       <td className="px-3 py-2">
         <div className="flex flex-wrap gap-2">
           {rows.map((row) => {
-            const color = countryColor(row.country);
             const hasAudio = row.fileSizeMb != null;
             const isSel = selectedKey === row.key;
             return (
@@ -50,13 +44,13 @@ function LetterGroup({
                 onClick={() => onSelect(row.key)}
                 className="rounded px-2.5 py-1 font-garamond text-sm transition-opacity"
                 style={{
-                  backgroundColor: hasAudio ? `${color}28` : "rgba(255,255,255,0.04)",
+                  backgroundColor: hasAudio ? `${COLOR}28` : "rgba(255,255,255,0.04)",
                   border: isSel
-                    ? `1px solid ${color}`
+                    ? `1px solid ${COLOR}`
                     : hasAudio
-                      ? `1px solid ${color}60`
+                      ? `1px solid ${COLOR}60`
                       : "1px solid rgba(255,255,255,0.08)",
-                  color: hasAudio ? color : "rgba(255,255,255,0.25)",
+                  color: hasAudio ? COLOR : "rgba(255,255,255,0.22)",
                   opacity: isSel ? 1 : undefined,
                 }}
               >
@@ -113,16 +107,18 @@ function CountryTable({
   );
 }
 
-export default function BattleAudioCountryGrid({
+export default function BattleMusicCountryGrid({
   singles,
+  regionNames,
 }: {
   singles: CircleSingle[];
+  regionNames: ReadonlySet<string>;
 }) {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
   const countrySingles = singles.filter((s) => s.kind === "country");
-  const countries = countrySingles.filter((s) => !REGION_KEYS.has(s.country));
-  const regions   = countrySingles.filter((s) =>  REGION_KEYS.has(s.country));
+  const countries = countrySingles.filter((s) => !regionNames.has(s.country));
+  const regions   = countrySingles.filter((s) =>  regionNames.has(s.country));
 
   const selected = countrySingles.find((s) => s.key === selectedKey) ?? null;
 
@@ -155,7 +151,7 @@ export default function BattleAudioCountryGrid({
             <div>
               <div
                 className="font-cinzel text-sm tracking-[2px]"
-                style={{ color: countryColor(selected.country) }}
+                style={{ color: COLOR }}
               >
                 {selected.country}
               </div>
@@ -183,7 +179,7 @@ export default function BattleAudioCountryGrid({
               <audio
                 controls
                 className="w-full"
-                src={`/api/battle-audio/${selected.key}/audio?version=${selected.version ?? 1}`}
+                src={`/api/battle-music/${selected.key}/audio?version=${selected.version ?? 1}`}
               />
             </div>
           ) : (

@@ -1,12 +1,12 @@
 "use client";
 
 import { useActionState } from "react";
-import { uploadBattleAudio } from "@/app/admin/battles/actions";
+import { uploadBattleMusic } from "@/app/admin/battles/actions";
 
 const initial = { ok: false, message: "" };
 
-export function BattleAudioUploadForm() {
-  const [state, formAction, pending] = useActionState(uploadBattleAudio, initial);
+export function BattleMusicUploadForm() {
+  const [state, formAction, pending] = useActionState(uploadBattleMusic, initial);
 
   return (
     <form action={formAction} className="flex flex-col gap-4 max-w-md">

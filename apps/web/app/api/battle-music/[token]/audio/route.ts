@@ -13,7 +13,7 @@ export async function GET(
   const { token } = await params;
   const version = new URL(req.url).searchParams.get("version") ?? "1";
   const res = await fetch(
-    `${apiOrigin()}/battle-audio/${encodeURIComponent(token)}/audio?version=${version}`,
+    `${apiOrigin()}/battle-music/${encodeURIComponent(token)}/audio?version=${version}`,
   );
   if (!res.ok) {
     return NextResponse.json({ error: "not found" }, { status: res.status });

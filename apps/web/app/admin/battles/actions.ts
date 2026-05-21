@@ -6,7 +6,7 @@ function apiOrigin(): string {
   return base.replace(/\/+$/, "");
 }
 
-export async function uploadBattleAudio(
+export async function uploadBattleMusic(
   _prev: { ok: boolean; message: string } | undefined,
   formData: FormData,
 ): Promise<{ ok: boolean; message: string }> {
@@ -34,7 +34,7 @@ export async function uploadBattleAudio(
   upstream.append("file", file);
 
   const res = await fetch(
-    `${apiOrigin()}/battle-audio/${encodeURIComponent(token.trim())}?version=${version}`,
+    `${apiOrigin()}/battle-music/${encodeURIComponent(token.trim())}?version=${version}`,
     {
       method: "POST",
       headers: { Authorization: `Bearer ${adminToken}` },
@@ -50,7 +50,7 @@ export async function uploadBattleAudio(
   return { ok: true, message: `Uploaded ${token.trim()} v${version}` };
 }
 
-export async function deleteBattleAudio(
+export async function deleteBattleMusic(
   _prev: { ok: boolean; message: string } | undefined,
   formData: FormData,
 ): Promise<{ ok: boolean; message: string }> {
@@ -68,7 +68,7 @@ export async function deleteBattleAudio(
   }
 
   const res = await fetch(
-    `${apiOrigin()}/battle-audio/${encodeURIComponent(token.trim())}?version=${version}`,
+    `${apiOrigin()}/battle-music/${encodeURIComponent(token.trim())}?version=${version}`,
     {
       method: "DELETE",
       headers: { Authorization: `Bearer ${adminToken}` },

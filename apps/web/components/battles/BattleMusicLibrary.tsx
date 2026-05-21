@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { COUNTRY_DATA } from "@/lib/countries";
-import { genreIntensityPromptTextOrEmpty } from "@/lib/battle-audio-element-prompts";
-import { GENRE_NAMES, type Intensity } from "@/lib/genres";
-import BattleAudioCircle from "./BattleAudioCircle";
-import BattleAudioCountryGrid from "./BattleAudioCountryGrid";
+import { genreIntensityPromptTextOrEmpty } from "@/lib/battle-music-element-prompts";
+import BattleMusicCircle from "./BattleMusicCircle";
+import BattleMusicCountryGrid from "./BattleMusicCountryGrid";
 
 type SingleKind = "genreIntensity" | "country";
 type SortDir = "asc" | "desc";
@@ -42,7 +40,11 @@ type AudioMeta = {
   durationSec: number | null;
 };
 
-const INTENSITIES: Intensity[] = ["POP", "SOFT", "EXPERIMENTAL", "HARDCORE"];
+type CatalogGenre = { name: string; wheelOrder: number | null };
+type CatalogTerritory = { name: string; isRegion: boolean };
+type Catalog = { genres: CatalogGenre[]; territories: CatalogTerritory[] };
+
+const INTENSITIES = ["POP", "SOFT", "EXPERIMENTAL", "HARDCORE"] as const;
 
 function slugify(value: string): string {
   return value
@@ -61,41 +63,43 @@ function tokenForCountry(country: string): string {
   return `country-${slugify(country)}`;
 }
 
-function buildSingles(): SingleRow[] {
+function buildSingles(catalog: Catalog): SingleRow[] {
   const rows: SingleRow[] = [];
-  for (const genre of GENRE_NAMES) {
-    const levels = genre === "Mainstream" ? (["POP"] as const) : INTENSITIES;
-    for (const intensity of levels) {
+
+  // Mainstream (wheelOrder null) = POP only; all others = all 4 intensities
+  for (const g of catalog.genres) {
+    const intensities = g.wheelOrder === null ? (["POP"] as const) : INTENSITIES;
+    for (const intensity of intensities) {
       rows.push({
-        key: tokenForGenreIntensity(genre, intensity),
+        key: tokenForGenreIntensity(g.name, intensity),
         kind: "genreIntensity",
-        label: `${genre} · ${intensity}`,
-        genre,
+        label: `${g.name} · ${intensity}`,
+        genre: g.name,
         intensity,
         country: "",
-        prompt: genreIntensityPromptTextOrEmpty(genre, intensity),
+        prompt: genreIntensityPromptTextOrEmpty(g.name, intensity),
         fileSizeMb: null,
         durationMin: null,
         version: null,
       });
     }
   }
-  for (const country of Object.keys(COUNTRY_DATA).sort((a, b) =>
-    a.localeCompare(b),
-  )) {
+
+  for (const t of catalog.territories) {
     rows.push({
-      key: tokenForCountry(country),
+      key: tokenForCountry(t.name),
       kind: "country",
-      label: `${country} (country)`,
+      label: `${t.name} (country)`,
       genre: "",
       intensity: "",
-      country,
+      country: t.name,
       prompt: "",
       fileSizeMb: null,
       durationMin: null,
       version: null,
     });
   }
+
   return rows;
 }
 
@@ -134,18 +138,32 @@ function buildMetaMap(audioList: AudioMeta[]): Map<string, { bytes: number; dura
   return map;
 }
 
-export default function BattleAudioLibrary() {
-  const baseSingles = useMemo(() => buildSingles(), []);
+export default function BattleMusicLibrary() {
+  const [catalog, setCatalog] = useState<Catalog | null>(null);
   const [audioMeta, setAudioMeta] = useState<AudioMeta[]>([]);
 
   useEffect(() => {
-    fetch("/api/battle-audio")
+    fetch("/api/battle-music/catalog")
+      .then((r) => r.json() as Promise<Catalog>)
+      .then(setCatalog)
+      .catch(() => {});
+    fetch("/api/battle-music")
       .then((r) => r.json() as Promise<AudioMeta[]>)
       .then(setAudioMeta)
-      .catch(() => {/* silently ignore — metadata stays null */});
+      .catch(() => {});
   }, []);
 
   const metaMap = useMemo(() => buildMetaMap(audioMeta), [audioMeta]);
+
+  const baseSingles = useMemo(
+    () => (catalog ? buildSingles(catalog) : []),
+    [catalog],
+  );
+
+  const regionNames = useMemo(
+    () => new Set(catalog?.territories.filter((t) => t.isRegion).map((t) => t.name) ?? []),
+    [catalog],
+  );
 
   const singles = useMemo<SingleRow[]>(() =>
     baseSingles.map((row) => {
@@ -331,11 +349,11 @@ export default function BattleAudioLibrary() {
       </p>
 
       <div className="mb-10">
-        <BattleAudioCircle singles={singles} />
+        <BattleMusicCircle singles={singles} />
       </div>
 
       <div className="mb-10">
-        <BattleAudioCountryGrid singles={singles} />
+        <BattleMusicCountryGrid singles={singles} regionNames={REGION_TERRITORY_NAMES} />
       </div>
 
       <div className="mb-10">

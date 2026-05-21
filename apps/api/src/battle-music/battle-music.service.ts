@@ -4,21 +4,21 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import type { BattleAudio } from "@prisma/client";
+import type { BattleMusic } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { S3Service } from "../storage/s3.service";
-import { BattleAudioDto } from "./battle-audio.dto";
+import { BattleMusicCatalogDto, BattleMusicDto } from "./battle-music.dto";
 
 @Injectable()
-export class BattleAudioService {
+export class BattleMusicService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly s3: S3Service,
   ) {}
 
-  private toDto(row: BattleAudio): BattleAudioDto {
+  private toDto(row: BattleMusic): BattleMusicDto {
     const audioUrl =
-      this.s3.publicUrl(row.audioKey) ?? `/battle-audio/${row.token}/audio?version=${row.version}`;
+      this.s3.publicUrl(row.audioKey) ?? `/battle-music/${row.token}/audio?version=${row.version}`;
     return {
       id: row.id,
       token: row.token,
@@ -33,15 +33,36 @@ export class BattleAudioService {
     };
   }
 
-  async list(): Promise<BattleAudioDto[]> {
-    const rows = await this.prisma.battleAudio.findMany({
+  async catalog(): Promise<BattleMusicCatalogDto> {
+    const [genres, territories] = await Promise.all([
+      this.prisma.genre.findMany({
+        where: { parentId: null, parentTerritoryId: null },
+        select: { name: true, wheelOrder: true },
+        orderBy: [{ wheelOrder: "asc" }, { name: "asc" }],
+      }),
+      this.prisma.territory.findMany({
+        select: { name: true, code: true },
+        orderBy: { name: "asc" },
+      }),
+    ]);
+    return {
+      genres: genres.map((g) => ({ name: g.name, wheelOrder: g.wheelOrder })),
+      territories: territories.map((t) => ({
+        name: t.name,
+        isRegion: t.code.startsWith("X"),
+      })),
+    };
+  }
+
+  async list(): Promise<BattleMusicDto[]> {
+    const rows = await this.prisma.battleMusic.findMany({
       orderBy: [{ token: "asc" }, { version: "asc" }],
     });
     return rows.map((r) => this.toDto(r));
   }
 
   async resolveRedirectUrl(token: string, version: number): Promise<string> {
-    const row = await this.prisma.battleAudio.findUnique({
+    const row = await this.prisma.battleMusic.findUnique({
       where: { token_version: { token, version } },
     });
     if (!row) {
@@ -56,7 +77,7 @@ export class BattleAudioService {
     token: string,
     version: number,
     file: Express.Multer.File,
-  ): Promise<BattleAudioDto> {
+  ): Promise<BattleMusicDto> {
     if (!file?.buffer?.length) {
       throw new BadRequestException("Empty file");
     }
@@ -66,7 +87,7 @@ export class BattleAudioService {
     const key = `audio/battle/singles/${token}-v${version}.mp3`;
     const sha = createHash("sha256").update(file.buffer).digest("hex");
 
-    const existing = await this.prisma.battleAudio.findUnique({
+    const existing = await this.prisma.battleMusic.findUnique({
       where: { token_version: { token, version } },
     });
 
@@ -84,7 +105,7 @@ export class BattleAudioService {
 
     await this.s3.putObject(key, file.buffer, file.mimetype, file.size);
 
-    const row = await this.prisma.battleAudio.upsert({
+    const row = await this.prisma.battleMusic.upsert({
       where: { token_version: { token, version } },
       create: {
         token,
@@ -106,7 +127,7 @@ export class BattleAudioService {
   }
 
   async deleteAudio(token: string, version: number): Promise<void> {
-    const row = await this.prisma.battleAudio.findUnique({
+    const row = await this.prisma.battleMusic.findUnique({
       where: { token_version: { token, version } },
     });
     if (!row) {
@@ -117,7 +138,7 @@ export class BattleAudioService {
     } catch {
       /* ignore missing object */
     }
-    await this.prisma.battleAudio.delete({
+    await this.prisma.battleMusic.delete({
       where: { token_version: { token, version } },
     });
   }

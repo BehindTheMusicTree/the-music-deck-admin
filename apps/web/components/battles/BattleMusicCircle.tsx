@@ -1,8 +1,8 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useState } from "react";
-import { GENRE_THEMES, WHEEL_GENRES, genreIntensityColor } from "@/lib/genres";
+import { useMemo, useState } from "react";
+import { GENRE_THEMES, genreIntensityColor } from "@/lib/genres";
 import type { NonMainstreamGenreName, Intensity } from "@/lib/genres";
 
 type CircleSingle = {
@@ -30,12 +30,9 @@ const R_HC_OUT     = 208;  // HARDCORE outer
 
 const GENRE_SLICE_GAP = 1.5; // degrees between genre slices
 
-// The 7 non-Mainstream genres in wheel order
-const WHEEL_GENRE_NAMES = WHEEL_GENRES.map((g) => g.n) as NonMainstreamGenreName[];
-const NUM_GENRES  = WHEEL_GENRE_NAMES.length; // 7
-const SLICE_SPAN  = (360 - NUM_GENRES * GENRE_SLICE_GAP) / NUM_GENRES;
+// Derived at render time from the singles prop — see wheelGenreNames below.
 
-const INTENSITIES: Intensity[] = ["POP", "SOFT", "EXPERIMENTAL", "HARDCORE"];
+const INTENSITIES = ["POP", "SOFT", "EXPERIMENTAL", "HARDCORE"] as const;
 
 const INTENSITY_BANDS: Array<{ intensity: Intensity; inner: number; outer: number }> = [
   { intensity: "POP",          inner: R_POP_IN,  outer: R_POP_OUT  },
@@ -88,8 +85,8 @@ function sectorPath(
 }
 
 /** Angle at which genre slice i starts (degrees, –90 = top). */
-function genreSliceStart(i: number): number {
-  return -90 + i * (SLICE_SPAN + GENRE_SLICE_GAP);
+function genreSliceStart(i: number, span: number): number {
+  return -90 + i * (span + GENRE_SLICE_GAP);
 }
 
 function singleColor(kind: string, genre: string, intensity: string): string {
@@ -100,9 +97,25 @@ function singleColor(kind: string, genre: string, intensity: string): string {
 
 // ── component ─────────────────────────────────────────────────────────────────
 
-export default function BattleAudioCircle({ singles }: { singles: CircleSingle[] }) {
+export default function BattleMusicCircle({ singles }: { singles: CircleSingle[] }) {
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+
+  // Derive wheel genre order from singles (non-Mainstream genreIntensity, unique genres, insertion order)
+  const wheelGenreNames = useMemo(() => {
+    const seen = new Set<string>();
+    const order: string[] = [];
+    for (const s of singles) {
+      if (s.kind === "genreIntensity" && s.genre !== "Mainstream" && !seen.has(s.genre)) {
+        seen.add(s.genre);
+        order.push(s.genre);
+      }
+    }
+    return order as NonMainstreamGenreName[];
+  }, [singles]);
+
+  const numGenres = wheelGenreNames.length;
+  const sliceSpan = numGenres > 0 ? (360 - numGenres * GENRE_SLICE_GAP) / numGenres : 0;
 
   // Build lookups
   const byKey = new Map(singles.map((s) => [s.key, s]));
@@ -155,8 +168,8 @@ export default function BattleAudioCircle({ singles }: { singles: CircleSingle[]
         ))}
 
         {/* ── radial genre dividers ── */}
-        {WHEEL_GENRE_NAMES.map((_, i) => {
-          const angle = genreSliceStart(i) - GENRE_SLICE_GAP / 2;
+        {wheelGenreNames.map((_, i) => {
+          const angle = genreSliceStart(i, sliceSpan) - GENRE_SLICE_GAP / 2;
           const inner = polarToXY(CX, CY, R_POP_IN - 2, angle);
           const outer = polarToXY(CX, CY, R_HC_OUT + 2, angle);
           return (
@@ -171,9 +184,9 @@ export default function BattleAudioCircle({ singles }: { singles: CircleSingle[]
         })}
 
         {/* ── genre × intensity cells ── */}
-        {WHEEL_GENRE_NAMES.map((genre, gi) => {
-          const sliceStart = genreSliceStart(gi);
-          const sliceEnd   = sliceStart + SLICE_SPAN;
+        {wheelGenreNames.map((genre, gi) => {
+          const sliceStart = genreSliceStart(gi, sliceSpan);
+          const sliceEnd   = sliceStart + sliceSpan;
           return INTENSITY_BANDS.map(({ intensity, inner, outer }) => {
             const row = byGenreIntensity.get(`${genre}|${intensity}`);
             if (!row) return null;
@@ -268,7 +281,7 @@ export default function BattleAudioCircle({ singles }: { singles: CircleSingle[]
               <audio
                 controls
                 className="w-full"
-                src={`/api/battle-audio/${selected.key}/audio?version=${selected.version ?? 1}`}
+                src={`/api/battle-music/${selected.key}/audio?version=${selected.version ?? 1}`}
               />
             </div>
           ) : (

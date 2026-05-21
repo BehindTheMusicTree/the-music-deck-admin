@@ -7,12 +7,11 @@ function apiOrigin(): string {
 }
 
 export async function GET(): Promise<NextResponse> {
-  const res = await fetch(`${apiOrigin()}/battle-audio`, {
-    next: { revalidate: 30 },
+  const res = await fetch(`${apiOrigin()}/battle-music/catalog`, {
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
-    return NextResponse.json([], { status: res.status });
+    return NextResponse.json({ genres: [], territories: [] }, { status: res.status });
   }
-  const data = await res.json();
-  return NextResponse.json(data);
+  return NextResponse.json(await res.json());
 }

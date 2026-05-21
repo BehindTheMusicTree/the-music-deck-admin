@@ -3,9 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import BattlesSubTabs from "./BattlesSubTabs";
-import BattleAudioPromptBuilder from "./BattleAudioPromptBuilder";
-import BattleAudioLibrary from "./BattleAudioLibrary";
-import { BattleAudioUploadForm } from "./BattleAudioUploadForm";
+import BattleMusicPromptBuilder from "./BattleMusicPromptBuilder";
+import BattleMusicLibrary from "./BattleMusicLibrary";
+import { BattleMusicUploadForm } from "./BattleMusicUploadForm";
 
 type BattlesTab = "overview" | "audio";
 
@@ -284,13 +284,13 @@ function BattlesAudio() {
       {audioTab === "upload" ? (
         <div className="px-6 pb-12 sm:pb-[60px] max-w-4xl mx-auto">
           <section className="max-w-[760px]">
-            <h2 className="section-title mb-4">Upload battle audio</h2>
+            <h2 className="section-title mb-4">Upload battle music</h2>
             <p className="font-garamond text-muted mb-6">
               Upload an MP3 to S3. The token must match the slug used by the
               game client (e.g. <span className="font-mono text-white/70">genre-rock--intensity-experimental</span>).
               Version 1 is the default; use higher versions for alternate takes.
             </p>
-            <BattleAudioUploadForm />
+            <BattleMusicUploadForm />
           </section>
         </div>
       ) : audioTab === "overview" ? (
@@ -305,7 +305,7 @@ function BattlesAudio() {
                 celebrity voice imitation.
               </li>
               <li>
-                Non-battle audio (menus, collection, UI, boosters) is out of
+                Non-battle music (menus, collection, UI, boosters) is out of
                 scope in this section.
               </li>
             </ul>
@@ -365,12 +365,12 @@ function BattlesAudio() {
           </section>
 
           <section className="max-w-[760px]">
-            <BattleAudioPromptBuilder />
+            <BattleMusicPromptBuilder />
           </section>
         </div>
       ) : (
         <div className="px-6 pb-12 sm:pb-[60px]">
-          <BattleAudioLibrary />
+          <BattleMusicLibrary />
         </div>
       )}
     </div>
