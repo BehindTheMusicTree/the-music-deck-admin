@@ -15,8 +15,8 @@ export const SPAIN_CARDS: CardData[] = [
     pop: 6,
     rarity: "BANGER",
     country: "Spain",
-    artwork: `${ART}artwork.ska-p-cannabis-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.ska-p-cannabis-v1.png"],
+    artwork: `${ART}ska-p-cannabis-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["ska-p-cannabis-v1.png"],
   },
   {
     id: 30,
@@ -29,9 +29,9 @@ export const SPAIN_CARDS: CardData[] = [
     abilityDesc: "+8 popularity when played after another dance track.",
     pop: 9,
     rarity: "BANGER",
-    artwork: `${ART}artwork.las-ketchup-the-ketchup-song-v1.png`,
+    artwork: `${ART}las-ketchup-the-ketchup-song-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.las-ketchup-the-ketchup-song-v1.png"],
+      ARTWORK_CREATED_AT["las-ketchup-the-ketchup-song-v1.png"],
     catalogNumber: 3,
   },
   {
@@ -45,8 +45,8 @@ export const SPAIN_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "BANGER",
-    artwork: `${ART}artwork.me-gustas-tu-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.me-gustas-tu-v1.png"],
+    artwork: `${ART}me-gustas-tu-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["me-gustas-tu-v1.png"],
     catalogNumber: 2,
   },
 ];
