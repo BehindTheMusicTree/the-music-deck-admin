@@ -14,9 +14,9 @@ export const USA_CARDS: CardData[] = [
     pop: 8,
     rarity: "BANGER",
     country: "USA",
-    artwork: `${ART}artwork.take-me-home-country-roads-v1.png`,
+    artwork: `${ART}take-me-home-country-roads-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.take-me-home-country-roads-v1.png"],
+      ARTWORK_CREATED_AT["take-me-home-country-roads-v1.png"],
   },
   {
     catalogNumber: 3,
@@ -30,8 +30,8 @@ export const USA_CARDS: CardData[] = [
     pop: 7,
     rarity: "CLASSIC",
     country: "USA",
-    artwork: `${ART}artwork.amazing-grace-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.amazing-grace-v1.png"],
+    artwork: `${ART}amazing-grace-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["amazing-grace-v1.png"],
     ...(artworkPromptFor(21) ?? {}),
   },
   {
@@ -46,9 +46,9 @@ export const USA_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 7,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.golden-gate-quartet-take-five-v1.png`,
+    artwork: `${ART}golden-gate-quartet-take-five-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.golden-gate-quartet-take-five-v1.png"],
+      ARTWORK_CREATED_AT["golden-gate-quartet-take-five-v1.png"],
     ...(artworkPromptFor(76) ?? {}),
   },
   {
@@ -64,9 +64,9 @@ export const USA_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.the-platters-the-great-pretender-v1.png`,
+    artwork: `${ART}the-platters-the-great-pretender-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.the-platters-the-great-pretender-v1.png"],
+      ARTWORK_CREATED_AT["the-platters-the-great-pretender-v1.png"],
     ...(artworkPromptFor(100) ?? {}),
   },
 ];
