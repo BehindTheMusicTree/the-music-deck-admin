@@ -164,7 +164,7 @@ async function computePrintedSetIdsByCardId(
 
 function artworkKeyFromCard(card: CardData): string | null {
   if (!card.artwork) return null;
-  return `deck/${basename(card.artwork)}`;
+  return `card-artworks/${basename(card.artwork)}`;
 }
 
 function dateFromArtworkCreatedAt(value: string | undefined): Date | null {
