@@ -1,6 +1,6 @@
 /**
  * One-time / idempotent upload of bundled MP3s from the web app to S3.
- * Run from repo root: `pnpm --filter api battle-audio:migrate`
+ * Run from repo root: `pnpm --filter api battle-music:migrate`
  *
  * Requires DATABASE_URL + S3_* env (see apps/api/.env.example).
  *
@@ -95,7 +95,7 @@ async function main(): Promise<void> {
     const bytes = statSync(filePath).size;
     const sha = await sha256File(filePath);
 
-    const existing = await prisma.battleAudio.findUnique({
+    const existing = await prisma.battleMusic.findUnique({
       where: { token_version: { token, version } },
     });
 
@@ -116,7 +116,7 @@ async function main(): Promise<void> {
       }),
     );
 
-    await prisma.battleAudio.upsert({
+    await prisma.battleMusic.upsert({
       where: { token_version: { token, version } },
       create: { token, version, audioKey: key, contentType: "audio/mpeg", bytes, checksum: sha },
       update: { audioKey: key, contentType: "audio/mpeg", bytes, checksum: sha },
@@ -127,7 +127,7 @@ async function main(): Promise<void> {
   }
 
   console.log(
-    `battle-audio:migrate done — uploaded=${uploaded} skipped=${skipped} invalid=${invalid}`,
+    `battle-music:migrate done — uploaded=${uploaded} skipped=${skipped} invalid=${invalid}`,
   );
 }
 

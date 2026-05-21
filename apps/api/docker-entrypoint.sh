@@ -4,5 +4,5 @@ cd /app
 ./node_modules/.bin/prisma migrate deploy
 node dist/prisma/seed.js
 node dist/scripts/migrate-artworks.js
-node dist/scripts/migrate-battle-audio.js
+node dist/scripts/migrate-battle-music.js
 exec "$@"

@@ -1,6 +1,6 @@
 // Kept in sync with root `schema.prisma` (generator entry point). Prisma loads `prisma/schema.prisma` only.
 
-model BattleAudio {
+model BattleMusic {
   id          Int       @id @default(autoincrement())
   /// Slug identifying the combination, e.g. "genre-rock--intensity-experimental", "country-france"
   token       String

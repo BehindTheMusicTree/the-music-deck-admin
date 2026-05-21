@@ -140,8 +140,8 @@ CREATE TABLE "SongSongTransition" (
     CONSTRAINT "SongSongTransition_pkey" PRIMARY KEY ("fromId","toId")
 );
 
--- CreateTable BattleAudio
-CREATE TABLE "BattleAudio" (
+-- CreateTable BattleMusic
+CREATE TABLE "BattleMusic" (
     "id" SERIAL NOT NULL,
     "token" TEXT NOT NULL,
     "version" INTEGER NOT NULL DEFAULT 1,
@@ -153,7 +153,7 @@ CREATE TABLE "BattleAudio" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "BattleAudio_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "BattleMusic_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -181,7 +181,7 @@ CREATE UNIQUE INDEX "WishlistSong_rowKey_key" ON "WishlistSong"("rowKey");
 CREATE INDEX "SongSongTransition_toId_idx" ON "SongSongTransition"("toId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "BattleAudio_token_version_key" ON "BattleAudio"("token", "version");
+CREATE UNIQUE INDEX "BattleMusic_token_version_key" ON "BattleMusic"("token", "version");
 
 -- AddForeignKey
 ALTER TABLE "Territory" ADD CONSTRAINT "Territory_code_fkey" FOREIGN KEY ("code") REFERENCES "TypeCode"("code") ON DELETE RESTRICT ON UPDATE CASCADE;

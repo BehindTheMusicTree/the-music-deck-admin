@@ -14,9 +14,9 @@
     "prisma:migrate:deploy": "set -a && . ./.env && set +a && prisma migrate deploy",
     "prisma:migrate:reset": "set -a && . ./.env && set +a && prisma migrate reset",
     "db:seed": "tsx prisma/seed.ts",
-    "db:reset": "set -a && . ./.env && set +a && prisma migrate reset --force && pnpm db:seed && pnpm artworks:migrate && pnpm battle-audio:migrate",
+    "db:reset": "set -a && . ./.env && set +a && prisma migrate reset --force && pnpm db:seed && pnpm artworks:migrate && pnpm battle-music:migrate",
     "artworks:migrate": "tsx scripts/migrate-artworks.ts",
-    "battle-audio:migrate": "tsx scripts/migrate-battle-audio.ts"
+    "battle-music:migrate": "tsx scripts/migrate-battle-music.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1041.0",
