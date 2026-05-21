@@ -12,9 +12,9 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Repeats its effect once if experimental is above 60.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.daft-punk-one-more-time-v1.png`,
+    artwork: `${ART}daft-punk-one-more-time-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.daft-punk-one-more-time-v1.png"],
+      ARTWORK_CREATED_AT["daft-punk-one-more-time-v1.png"],
     ...(artworkPromptFor(3) ?? {}),
   },
   {
@@ -27,9 +27,9 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.paul-karlkbrenner-sky-and-sand-v1.png`,
+    artwork: `${ART}paul-karlkbrenner-sky-and-sand-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.paul-karlkbrenner-sky-and-sand-v1.png"],
+      ARTWORK_CREATED_AT["paul-karlkbrenner-sky-and-sand-v1.png"],
     ...(artworkPromptFor(37) ?? {}),
   },
   {
@@ -42,8 +42,8 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.avicii-levels-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.avicii-levels-v1.png"],
+    artwork: `${ART}avicii-levels-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["avicii-levels-v1.png"],
     ...(artworkPromptFor(42) ?? {}),
   },
   {
@@ -56,8 +56,8 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.psy-gagnam-style-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.psy-gagnam-style-v1.png"],
+    artwork: `${ART}psy-gagnam-style-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["psy-gagnam-style-v1.png"],
     ...(artworkPromptFor(45) ?? {}),
   },
   {
@@ -70,8 +70,8 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.lady-gaga-poker-face-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.lady-gaga-poker-face-v1.png"],
+    artwork: `${ART}lady-gaga-poker-face-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["lady-gaga-poker-face-v1.png"],
     ...(artworkPromptFor(46) ?? {}),
   },
   {
@@ -85,10 +85,10 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.daft-punk-harder-better-faster-stronger-v1.png`,
+    artwork: `${ART}daft-punk-harder-better-faster-stronger-v1.png`,
     artworkCreatedAt:
       ARTWORK_CREATED_AT[
-        "artwork.daft-punk-harder-better-faster-stronger-v1.png"
+        "daft-punk-harder-better-faster-stronger-v1.png"
       ],
   },
   {
@@ -102,9 +102,9 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.taylor-swift-shake-it-off-v1.png`,
+    artwork: `${ART}taylor-swift-shake-it-off-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.taylor-swift-shake-it-off-v1.png"],
+      ARTWORK_CREATED_AT["taylor-swift-shake-it-off-v1.png"],
   },
   {
     catalogNumber: 9,
@@ -116,8 +116,8 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.darude-sandstorm-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.darude-sandstorm-v1.png"],
+    artwork: `${ART}darude-sandstorm-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["darude-sandstorm-v1.png"],
     ...(artworkPromptFor(59) ?? {}),
   },
   {
@@ -132,9 +132,9 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.tears-for-fears-mad-world-v1.png`,
+    artwork: `${ART}tears-for-fears-mad-world-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.tears-for-fears-mad-world-v1.png"],
+      ARTWORK_CREATED_AT["tears-for-fears-mad-world-v1.png"],
     ...(artworkPromptFor(109) ?? {}),
   },
   {
@@ -149,8 +149,8 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.eric-prydz-opus-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.eric-prydz-opus-v1.png"],
+    artwork: `${ART}eric-prydz-opus-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["eric-prydz-opus-v1.png"],
   },
   {
     catalogNumber: 13,
@@ -164,8 +164,8 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.four-tet-opus-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.four-tet-opus-v1.png"],
+    artwork: `${ART}four-tet-opus-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["four-tet-opus-v1.png"],
   },
   {
     catalogNumber: 14,
@@ -178,8 +178,8 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "BANGER",
-    artwork: `${ART}artwork.lunatic-opus-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.lunatic-opus-v1.png"],
+    artwork: `${ART}lunatic-opus-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["lunatic-opus-v1.png"],
   },
   {
     catalogNumber: 15,
@@ -192,9 +192,9 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.bennet-vois-sur-ton-chemin-v1.png`,
+    artwork: `${ART}bennet-vois-sur-ton-chemin-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.bennet-vois-sur-ton-chemin-v1.png"],
+      ARTWORK_CREATED_AT["bennet-vois-sur-ton-chemin-v1.png"],
     ...(artworkPromptFor(90) ?? {}),
   },
   {
@@ -208,8 +208,8 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "BANGER",
-    artwork: `${ART}artwork.c2c-superstition-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.c2c-superstition-v1.png"],
+    artwork: `${ART}c2c-superstition-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["c2c-superstition-v1.png"],
     ...(artworkPromptFor(93) ?? {}),
   },
   {
@@ -224,9 +224,9 @@ export const ELECTRONIC_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "BANGER",
-    artwork: `${ART}artwork.adam-beyer-loosing-your-mind-v1.png`,
+    artwork: `${ART}adam-beyer-loosing-your-mind-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.adam-beyer-loosing-your-mind-v1.png"],
+      ARTWORK_CREATED_AT["adam-beyer-loosing-your-mind-v1.png"],
     ...(artworkPromptFor(108) ?? {}),
   },
 ] as CardData[];
