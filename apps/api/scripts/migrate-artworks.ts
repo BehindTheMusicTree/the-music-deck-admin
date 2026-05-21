@@ -85,7 +85,7 @@ async function main(): Promise<void> {
   const bucket = requireEnv("S3_BUCKET");
   const client = s3Client();
   const repoRoot = join(__dirname, "../../..");
-  const deckDir = join(repoRoot, "apps/web/public/cards/artworks/deck");
+  const deckDir = join(repoRoot, "apps/web/public/card-artworks");
   const files = readdirSync(deckDir).filter((f) =>
     f.toLowerCase().endsWith(".png"),
   );
