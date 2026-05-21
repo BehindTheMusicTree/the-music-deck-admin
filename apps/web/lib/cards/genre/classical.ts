@@ -13,8 +13,8 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 5,
     rarity: "BANGER",
-    artwork: `${ART}artwork.god-save-the-king-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.god-save-the-king-v1.png"],
+    artwork: `${ART}god-save-the-king-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["god-save-the-king-v1.png"],
     ...(artworkPromptFor(38) ?? {}),
   },
   {
@@ -28,8 +28,8 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 5,
     rarity: "BANGER",
-    artwork: `${ART}artwork.god-save-the-queen-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.god-save-the-queen-v1.png"],
+    artwork: `${ART}god-save-the-queen-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["god-save-the-queen-v1.png"],
     ...(artworkPromptFor(39) ?? {}),
   },
   {
@@ -44,8 +44,8 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 7,
     rarity: "BANGER",
-    artwork: `${ART}artwork.vivaldi-spring-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.vivaldi-spring-v1.png"],
+    artwork: `${ART}vivaldi-spring-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["vivaldi-spring-v1.png"],
     ...(artworkPromptFor(54) ?? {}),
   },
   {
@@ -60,8 +60,8 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 7,
     rarity: "BANGER",
-    artwork: `${ART}artwork.vivaldi-summer-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.vivaldi-summer-v1.png"],
+    artwork: `${ART}vivaldi-summer-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["vivaldi-summer-v1.png"],
     ...(artworkPromptFor(55) ?? {}),
   },
   {
@@ -76,8 +76,8 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 7,
     rarity: "BANGER",
-    artwork: `${ART}artwork.vivaldi-autumn-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.vivaldi-autumn-v1.png"],
+    artwork: `${ART}vivaldi-autumn-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["vivaldi-autumn-v1.png"],
     ...(artworkPromptFor(56) ?? {}),
   },
   {
@@ -92,8 +92,8 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 7,
     rarity: "BANGER",
-    artwork: `${ART}artwork.vivaldi-winter-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.vivaldi-winter-v1.png"],
+    artwork: `${ART}vivaldi-winter-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["vivaldi-winter-v1.png"],
     ...(artworkPromptFor(57) ?? {}),
   },
   {
@@ -107,9 +107,9 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.mozart-requiem-lacrimosa-v1.png`,
+    artwork: `${ART}mozart-requiem-lacrimosa-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.mozart-requiem-lacrimosa-v1.png"],
+      ARTWORK_CREATED_AT["mozart-requiem-lacrimosa-v1.png"],
   },
   {
     catalogNumber: 9,
@@ -122,8 +122,8 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.verdi-dies-irae-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.verdi-dies-irae-v1.png"],
+    artwork: `${ART}verdi-dies-irae-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["verdi-dies-irae-v1.png"],
     ...(artworkPromptFor(66) ?? {}),
   },
   {
@@ -138,9 +138,9 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.beethoven-symphony-no-5-v1.png`,
+    artwork: `${ART}beethoven-symphony-no-5-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.beethoven-symphony-no-5-v1.png"],
+      ARTWORK_CREATED_AT["beethoven-symphony-no-5-v1.png"],
     ...(artworkPromptFor(72) ?? {}),
     artworkOffsetY: -25,
   },
@@ -155,8 +155,8 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.carmina-burana-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.carmina-burana-v1.png"],
+    artwork: `${ART}carmina-burana-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["carmina-burana-v1.png"],
   },
   {
     catalogNumber: 12,
@@ -169,9 +169,9 @@ export const CLASSICAL_CARDS: CardData[] = [
     abilityDesc: "Deals damage in three separate strikes of 60% power each.",
     pop: 6,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.wagner-ride-of-the-valkyries-v1.png`,
+    artwork: `${ART}wagner-ride-of-the-valkyries-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.wagner-ride-of-the-valkyries-v1.png"],
+      ARTWORK_CREATED_AT["wagner-ride-of-the-valkyries-v1.png"],
     ...(artworkPromptFor(7) ?? {}),
   },
 ] as CardData[];
