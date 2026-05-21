@@ -14,8 +14,8 @@ export const SWITZERLAND_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 6,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.e-gschankte-tag-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.e-gschankte-tag-v1.png"],
+    artwork: `${ART}e-gschankte-tag-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["e-gschankte-tag-v1.png"],
     ...(artworkPromptFor(97) ?? {}),
   },
 ];
