@@ -14,9 +14,9 @@ export const FRANCE_CARDS: CardData[] = [
     pop: 7,
     rarity: "LEGENDARY",
     country: "France",
-    artwork: `${ART}artwork.rouget-de-lisle-la-marseillaise-v1.png`,
+    artwork: `${ART}rouget-de-lisle-la-marseillaise-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.rouget-de-lisle-la-marseillaise-v1.png"],
+      ARTWORK_CREATED_AT["rouget-de-lisle-la-marseillaise-v1.png"],
     ...(artworkPromptFor(23) ?? {}),
   },
   {
@@ -31,9 +31,9 @@ export const FRANCE_CARDS: CardData[] = [
     pop: 7,
     rarity: "BANGER",
     country: "France",
-    artwork: `${ART}artwork.michel-sardou-les-lacs-du-connemara-v1.png`,
+    artwork: `${ART}michel-sardou-les-lacs-du-connemara-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.michel-sardou-les-lacs-du-connemara-v1.png"],
+      ARTWORK_CREATED_AT["michel-sardou-les-lacs-du-connemara-v1.png"],
     ...(artworkPromptFor(24) ?? {}),
   },
   {
@@ -49,9 +49,9 @@ export const FRANCE_CARDS: CardData[] = [
     pop: 9,
     rarity: "CLASSIC",
     country: "France",
-    artwork: `${ART}artwork.13-organises-bande-organisee-v1.png`,
+    artwork: `${ART}13-organises-bande-organisee-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.13-organises-bande-organisee-v1.png"],
+      ARTWORK_CREATED_AT["13-organises-bande-organisee-v1.png"],
     ...(artworkPromptFor(27) ?? {}),
   },
   {
@@ -68,8 +68,8 @@ export const FRANCE_CARDS: CardData[] = [
       "French World cards gain +5 power while this card remains in play.",
     pop: 7,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.les-corons-lens-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.les-corons-lens-v1.png"],
+    artwork: `${ART}les-corons-lens-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["les-corons-lens-v1.png"],
   },
   {
     catalogNumber: 3,
@@ -83,9 +83,9 @@ export const FRANCE_CARDS: CardData[] = [
     abilityDesc: "Heal 15 HP when played after a Classical or Vintage card.",
     pop: 7,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.luis-mariano-cest-magnifique-v1.png`,
+    artwork: `${ART}luis-mariano-cest-magnifique-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.luis-mariano-cest-magnifique-v1.png"],
+      ARTWORK_CREATED_AT["luis-mariano-cest-magnifique-v1.png"],
   },
   {
     id: 33,
@@ -99,9 +99,9 @@ export const FRANCE_CARDS: CardData[] = [
       "If another French card is on the field, draw one card from the deck.",
     pop: 8,
     rarity: "BANGER",
-    artwork: `${ART}artwork.zaho-mc-solar-caroline-v1.png`,
+    artwork: `${ART}zaho-mc-solar-caroline-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.zaho-mc-solar-caroline-v1.png"],
+      ARTWORK_CREATED_AT["zaho-mc-solar-caroline-v1.png"],
     catalogNumber: 3,
   },
   {
@@ -116,9 +116,9 @@ export const FRANCE_CARDS: CardData[] = [
     pop: 8,
     rarity: "CLASSIC",
     songsOut: [90],
-    artwork: `${ART}artwork.les-choristes-vois-sur-ton-chemin-v1.png`,
+    artwork: `${ART}les-choristes-vois-sur-ton-chemin-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.les-choristes-vois-sur-ton-chemin-v1.png"],
+      ARTWORK_CREATED_AT["les-choristes-vois-sur-ton-chemin-v1.png"],
     catalogNumber: 8,
   },
 ];
