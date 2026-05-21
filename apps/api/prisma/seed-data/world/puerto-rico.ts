@@ -15,8 +15,8 @@ export const PUERTO_RICO_CARDS: CardData[] = [
       "+10 popularity when played after another World or Mainstream card.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.luiz-fonzi-despacito-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.luiz-fonzi-despacito-v1.png"],
+    artwork: `${ART}luiz-fonzi-despacito-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["luiz-fonzi-despacito-v1.png"],
     ...(artworkPromptFor(36) ?? {}),
   },
 ];
