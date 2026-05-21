@@ -15,7 +15,7 @@ import {
   themeForCountry,
 } from "@/lib/genres";
 import { ARTWORK_CREATED_AT } from "./artwork-created-at";
-import { CARD_ARTWORK_BASE } from "./art-path";
+import { CARD_ARTWORK_BASE } from "./card-artworks-base";
 import { deriveCatalogSeriesLabel } from "./_card-helpers";
 import { ALL_GENRE_CARDS, DECK_ADDITIONAL_GENRE_CARDS } from "./genre";
 import { WORLD_FLAG_CARDS, WORLD_MIXED_CARDS } from "./world";
@@ -175,9 +175,9 @@ const _intermLaMacarena: IntermCatalogRow = {
     abilityDesc: "Gain +10 popularity when played after a World card.",
     pop: 9,
     rarity: "CLASSIC",
-    artwork: `${CARD_ARTWORK_BASE}artwork.los-del-rio-la-macarena-v1.png`,
+    artwork: `${CARD_ARTWORK_BASE}los-del-rio-la-macarena-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.los-del-rio-la-macarena-v1.png"],
+      ARTWORK_CREATED_AT["los-del-rio-la-macarena-v1.png"],
     country: "Spain",
     genre: "Electronic",
     catalogNumber: 17,
