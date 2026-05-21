@@ -12,8 +12,8 @@ export const REGGAE_DUB_CARDS: CardData[] = [
     abilityDesc: "Heals 20 HP when adjacent to a World genre card.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.is-this-love-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.is-this-love-v1.png"],
+    artwork: `${ART}is-this-love-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["is-this-love-v1.png"],
   },
   {
     catalogNumber: 2,
@@ -26,9 +26,9 @@ export const REGGAE_DUB_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.bob-marley-i-shot-the-sherif-v1.png`,
+    artwork: `${ART}bob-marley-i-shot-the-sherif-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.bob-marley-i-shot-the-sherif-v1.png"],
+      ARTWORK_CREATED_AT["bob-marley-i-shot-the-sherif-v1.png"],
     ...(artworkPromptFor(104) ?? {}),
   },
 ] as CardData[];
