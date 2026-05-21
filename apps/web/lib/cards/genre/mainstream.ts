@@ -12,8 +12,8 @@ export const MAINSTREAM_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "BANGER",
-    artwork: `${ART}artwork.hakuna-matata-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.hakuna-matata-v1.png"],
+    artwork: `${ART}hakuna-matata-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["hakuna-matata-v1.png"],
     ...(artworkPromptFor(78) ?? {}),
   },
   {
@@ -26,9 +26,9 @@ export const MAINSTREAM_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.freddy-mercury-the-great-pretender-v1.png`,
+    artwork: `${ART}freddy-mercury-the-great-pretender-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.freddy-mercury-the-great-pretender-v1.png"],
+      ARTWORK_CREATED_AT["freddy-mercury-the-great-pretender-v1.png"],
     ...(artworkPromptFor(101) ?? {}),
   },
   {
@@ -41,8 +41,8 @@ export const MAINSTREAM_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.shape-of-you-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.shape-of-you-v1.png"],
+    artwork: `${ART}shape-of-you-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["shape-of-you-v1.png"],
   },
   {
     catalogNumber: 4,
@@ -54,9 +54,9 @@ export const MAINSTREAM_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.celine-dion-my-hearth-will-go-on-v1.png`,
+    artwork: `${ART}celine-dion-my-hearth-will-go-on-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.celine-dion-my-hearth-will-go-on-v1.png"],
+      ARTWORK_CREATED_AT["celine-dion-my-hearth-will-go-on-v1.png"],
     ...(artworkPromptFor(43) ?? {}),
   },
 ];
