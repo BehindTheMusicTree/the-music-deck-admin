@@ -14,10 +14,10 @@ export const GERMANY_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 7,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.hannenmaykentereit-ich-geh-heut-nicht-mehr-tanzen-v1.png`,
+    artwork: `${ART}hannenmaykentereit-ich-geh-heut-nicht-mehr-tanzen-v1.png`,
     artworkCreatedAt:
       ARTWORK_CREATED_AT[
-        "artwork.hannenmaykentereit-ich-geh-heut-nicht-mehr-tanzen-v1.png"
+        "hannenmaykentereit-ich-geh-heut-nicht-mehr-tanzen-v1.png"
       ],
     ...(artworkPromptFor(95) ?? {}),
   },
