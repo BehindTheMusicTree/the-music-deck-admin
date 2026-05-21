@@ -3,7 +3,7 @@
 #
 # Postgres:  localhost:5433  (avoid clash with system Postgres)
 # MinIO:     localhost:9000 (S3 API), localhost:9001 (console)
-#   - bucket `tmd-admin-artworks-dev` is pre-created with public download policy by `mc-init`.
+#   - bucket `tmd-dev` is pre-created with public download policy by `mc-init`.
 services:
   db:
     image: postgres:16-alpine
@@ -57,7 +57,7 @@ services:
       MINIO_ENDPOINT: http://s3:9000
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-      MINIO_BUCKETS: tmd-admin-artworks-dev
+      MINIO_BUCKETS: tmd-dev
       MINIO_PUBLIC: "true"
     volumes:
       - ./scripts/minio-init-buckets.sh:/init-buckets.sh

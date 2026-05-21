@@ -1,13 +1,16 @@
 /**
- * One-time / idempotent upload of bundled PNGs from the web app to S3.
+ * Idempotent upload of bundled PNGs from the web app to S3.
  * Run from repo root: `pnpm --filter api artworks:migrate`
+ *
+ * Idempotency is based on S3 object existence, not DB state, so this is safe
+ * to re-run after `db:reset` without re-uploading files already in S3.
  *
  * Requires DATABASE_URL + S3_* env (see apps/api/.env.example).
  */
 import { createReadStream, readdirSync, statSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { join } from "node:path";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { HeadObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { PrismaClient } from "@prisma/client";
 import { ARTWORK_CREATED_AT } from "../prisma/seed-data/artwork-created-at";
 
@@ -69,6 +72,15 @@ async function sha256File(filePath: string): Promise<string> {
   });
 }
 
+async function existsInS3(client: S3Client, bucket: string, key: string): Promise<boolean> {
+  try {
+    await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function main(): Promise<void> {
   const bucket = requireEnv("S3_BUCKET");
   const client = s3Client();
@@ -95,22 +107,28 @@ async function main(): Promise<void> {
     const filePath = join(deckDir, filename);
     const bytes = statSync(filePath).size;
     const sha = await sha256File(filePath);
-    if (cardRow.artworkChecksum === sha) {
-      skipped += 1;
-      continue;
-    }
-    const stream = createReadStream(filePath);
-    await client.send(
-      new PutObjectCommand({
-        Bucket: bucket,
-        Key: effectiveKey,
-        Body: stream,
-        ContentType: "image/png",
-        ContentLength: bytes,
-      }),
-    );
     const birth = ARTWORK_CREATED_AT[filename];
     const artworkCreatedAt = birth ? new Date(birth) : new Date();
+
+    if (await existsInS3(client, bucket, effectiveKey)) {
+      console.log(`Skipped (already in S3): ${filename}`);
+      skipped += 1;
+    } else {
+      const stream = createReadStream(filePath);
+      await client.send(
+        new PutObjectCommand({
+          Bucket: bucket,
+          Key: effectiveKey,
+          Body: stream,
+          ContentType: "image/png",
+          ContentLength: bytes,
+        }),
+      );
+      console.log(`Uploaded: ${filename} → ${effectiveKey}`);
+      uploaded += 1;
+    }
+
+    // Always write DB record — restores state after db:reset without re-uploading.
     await prisma.card.update({
       where: { id: cardRow.id },
       data: {
@@ -121,7 +139,6 @@ async function main(): Promise<void> {
         artworkCreatedAt,
       },
     });
-    uploaded += 1;
   }
 
   console.log(

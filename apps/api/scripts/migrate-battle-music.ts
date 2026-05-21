@@ -1,19 +1,22 @@
 /**
- * One-time / idempotent upload of bundled MP3s from the web app to S3.
+ * Idempotent upload of bundled MP3s from the web app to S3.
  * Run from repo root: `pnpm --filter api battle-music:migrate`
  *
- * Requires DATABASE_URL + S3_* env (see apps/api/.env.example).
+ * Idempotency is based on S3 object existence, not DB state, so this is safe
+ * to re-run after `db:reset` without re-uploading files already in S3.
  *
  * Filename convention:
  *   {token}.mp3              → token, version 1
  *   {token}-v{n}.mp3         → token, version n
  *
- * S3 key: audio/battles/singles/{token}-v{version}.mp3
+ * S3 key: audio/battle/singles/{token}-v{version}.mp3
+ *
+ * Requires DATABASE_URL + S3_* env (see apps/api/.env.example).
  */
 import { createReadStream, readdirSync, statSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { join } from "node:path";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { HeadObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -51,6 +54,15 @@ async function sha256File(filePath: string): Promise<string> {
     stream.on("error", reject);
     stream.on("end", () => resolve(hash.digest("hex")));
   });
+}
+
+async function existsInS3(client: S3Client, bucket: string, key: string): Promise<boolean> {
+  try {
+    await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -95,35 +107,30 @@ async function main(): Promise<void> {
     const bytes = statSync(filePath).size;
     const sha = await sha256File(filePath);
 
-    const existing = await prisma.battleMusic.findUnique({
-      where: { token_version: { token, version } },
-    });
-
-    if (existing?.checksum === sha) {
-      console.log(`Skipped (unchanged): ${filename}`);
+    if (await existsInS3(client, bucket, key)) {
+      console.log(`Skipped (already in S3): ${filename}`);
       skipped += 1;
-      continue;
+    } else {
+      const stream = createReadStream(filePath);
+      await client.send(
+        new PutObjectCommand({
+          Bucket: bucket,
+          Key: key,
+          Body: stream,
+          ContentType: "audio/mpeg",
+          ContentLength: bytes,
+        }),
+      );
+      console.log(`Uploaded: ${filename} → ${key}`);
+      uploaded += 1;
     }
 
-    const stream = createReadStream(filePath);
-    await client.send(
-      new PutObjectCommand({
-        Bucket: bucket,
-        Key: key,
-        Body: stream,
-        ContentType: "audio/mpeg",
-        ContentLength: bytes,
-      }),
-    );
-
+    // Always upsert DB record — restores state after db:reset without re-uploading.
     await prisma.battleMusic.upsert({
       where: { token_version: { token, version } },
       create: { token, version, audioKey: key, contentType: "audio/mpeg", bytes, checksum: sha },
       update: { audioKey: key, contentType: "audio/mpeg", bytes, checksum: sha },
     });
-
-    console.log(`Uploaded: ${filename} → ${key}`);
-    uploaded += 1;
   }
 
   console.log(
