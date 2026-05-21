@@ -15,7 +15,7 @@ export const MEXICO_CARDS: CardData[] = [
     artworkOffsetY: -20,
     pop: 7,
     rarity: "BANGER",
-    artwork: `${ART}artwork.la-cucaracha-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.la-cucaracha-v1.png"],
+    artwork: `${ART}la-cucaracha-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["la-cucaracha-v1.png"],
   },
 ];
