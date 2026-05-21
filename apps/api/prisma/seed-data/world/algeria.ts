@@ -15,9 +15,9 @@ export const ALGERIA_CARDS: CardData[] = [
       "Allied World cards gain +4 popularity when this card enters play.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.un-deux-trois-soleil-abdel-kader-v1.png`,
+    artwork: `${ART}un-deux-trois-soleil-abdel-kader-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.un-deux-trois-soleil-abdel-kader-v1.png"],
+      ARTWORK_CREATED_AT["un-deux-trois-soleil-abdel-kader-v1.png"],
     ...(artworkPromptFor(35) ?? {}),
   },
   {
@@ -32,8 +32,8 @@ export const ALGERIA_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 6,
     rarity: "BANGER",
-    artwork: `${ART}artwork.shaft-malik-adouane-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.shaft-malik-adouane-v1.png"],
+    artwork: `${ART}shaft-malik-adouane-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["shaft-malik-adouane-v1.png"],
     artworkOffsetY: -25,
     ...(artworkPromptFor(82) ?? {}),
   },
