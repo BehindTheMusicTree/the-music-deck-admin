@@ -57,8 +57,8 @@ export interface CountryDef {
 const GLOBE_ICON =
   '<svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.2"/><ellipse cx="8" cy="8" rx="3" ry="6" fill="none" stroke="currentColor" stroke-width=".8"/><line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" stroke-width=".8"/></svg>';
 
-export const USA_FLAG_PATH = "/cards/artworks/deck/flag-usa.webp";
-const PUERTO_RICO_FLAG_PATH = "/cards/artworks/deck/flag-puerto-rico.svg";
+export const USA_FLAG_PATH = "/card-artworks/flag-usa.webp";
+const PUERTO_RICO_FLAG_PATH = "/card-artworks/flag-puerto-rico.svg";
 const PUERTO_RICO_FLAG_URL = `url('${PUERTO_RICO_FLAG_PATH}')`;
 // Pre-tarnished SVG data URIs — colours already reflect brightness/saturate/opacity tarnish
 // so no runtime CSS filter is needed (t82e for England, t90 for Switzerland).
