@@ -12,8 +12,8 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Doubles momentum on any track with a guitar solo.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.bohemian-rhapsody-v2.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.bohemian-rhapsody-v2.png"],
+    artwork: `${ART}bohemian-rhapsody-v2.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["bohemian-rhapsody-v2.png"],
   },
   {
     catalogNumber: 3,
@@ -26,8 +26,8 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Draws a second card if popularity is 9.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.beatles-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.beatles-v1.png"],
+    artwork: `${ART}beatles-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["beatles-v1.png"],
   },
   {
     catalogNumber: 4,
@@ -40,9 +40,9 @@ export const ROCK_CARDS: CardData[] = [
       "Opponent loses 10 popularity when you play a second Rock card this round.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.the-sex-pistols-god-save-the-queen-v1.png`,
+    artwork: `${ART}the-sex-pistols-god-save-the-queen-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.the-sex-pistols-god-save-the-queen-v1.png"],
+      ARTWORK_CREATED_AT["the-sex-pistols-god-save-the-queen-v1.png"],
   },
   {
     catalogNumber: 5,
@@ -54,8 +54,8 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.led-zeppelin-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.led-zeppelin-v1.png"],
+    artwork: `${ART}led-zeppelin-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["led-zeppelin-v1.png"],
     ...(artworkPromptFor(51) ?? {}),
   },
   {
@@ -68,9 +68,9 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.red-hot-chili-peppers-suck-my-kiss-v1.png`,
+    artwork: `${ART}red-hot-chili-peppers-suck-my-kiss-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.red-hot-chili-peppers-suck-my-kiss-v1.png"],
+      ARTWORK_CREATED_AT["red-hot-chili-peppers-suck-my-kiss-v1.png"],
     ...(artworkPromptFor(63) ?? {}),
   },
   {
@@ -83,9 +83,9 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.white-stripes-seven-nation-army-v1.png`,
+    artwork: `${ART}white-stripes-seven-nation-army-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.white-stripes-seven-nation-army-v1.png"],
+      ARTWORK_CREATED_AT["white-stripes-seven-nation-army-v1.png"],
     ...(artworkPromptFor(68) ?? {}),
   },
   {
@@ -98,9 +98,9 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.metallica-enter-sandman-v1.png`,
+    artwork: `${ART}metallica-enter-sandman-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.metallica-enter-sandman-v1.png"],
+      ARTWORK_CREATED_AT["metallica-enter-sandman-v1.png"],
     ...(artworkPromptFor(71) ?? {}),
   },
   {
@@ -113,9 +113,9 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.smells-like-teen-spirit-v2.png`,
+    artwork: `${ART}smells-like-teen-spirit-v2.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.smells-like-teen-spirit-v2.png"],
+      ARTWORK_CREATED_AT["smells-like-teen-spirit-v2.png"],
   },
   {
     catalogNumber: 10,
@@ -127,8 +127,8 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.money-v2.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.money-v2.png"],
+    artwork: `${ART}money-v2.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["money-v2.png"],
   },
   {
     catalogNumber: 11,
@@ -141,8 +141,8 @@ export const ROCK_CARDS: CardData[] = [
     artworkOffsetY: -24,
     pop: 8,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.ratm-guerilla-radio-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.ratm-guerilla-radio-v1.png"],
+    artwork: `${ART}ratm-guerilla-radio-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["ratm-guerilla-radio-v1.png"],
     ...(artworkPromptFor(80) ?? {}),
   },
   {
@@ -156,9 +156,9 @@ export const ROCK_CARDS: CardData[] = [
     artworkOffsetY: -35,
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.joe-cocker-woman-to-woman-v1.png`,
+    artwork: `${ART}joe-cocker-woman-to-woman-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.joe-cocker-woman-to-woman-v1.png"],
+      ARTWORK_CREATED_AT["joe-cocker-woman-to-woman-v1.png"],
   },
   {
     catalogNumber: 13,
@@ -171,8 +171,8 @@ export const ROCK_CARDS: CardData[] = [
       "Reads as pop on the strip but smuggles hardcore weight: massed percussion, marimba layers, and session-musician polyphony under an immovable chorus.",
     pop: 9,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.toto-africa-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.toto-africa-v1.png"],
+    artwork: `${ART}toto-africa-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["toto-africa-v1.png"],
     artworkOffsetY: -30,
     ...(artworkPromptFor(87) ?? {}),
   },
@@ -186,9 +186,9 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.jeff-beck-superstition-v1.png`,
+    artwork: `${ART}jeff-beck-superstition-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.jeff-beck-superstition-v1.png"],
+      ARTWORK_CREATED_AT["jeff-beck-superstition-v1.png"],
     ...(artworkPromptFor(92) ?? {}),
   },
   {
@@ -202,9 +202,9 @@ export const ROCK_CARDS: CardData[] = [
     artworkOffsetY: -20,
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.linkin-park-in-the-end-v1.png`,
+    artwork: `${ART}linkin-park-in-the-end-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.linkin-park-in-the-end-v1.png"],
+      ARTWORK_CREATED_AT["linkin-park-in-the-end-v1.png"],
   },
   {
     catalogNumber: 17,
@@ -216,9 +216,9 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 9,
     rarity: "LEGENDARY",
-    artwork: `${ART}artwork.eric-clapton-i-shot-the-sherif-v1.png`,
+    artwork: `${ART}eric-clapton-i-shot-the-sherif-v1.png`,
     artworkCreatedAt:
-      ARTWORK_CREATED_AT["artwork.eric-clapton-i-shot-the-sherif-v1.png"],
+      ARTWORK_CREATED_AT["eric-clapton-i-shot-the-sherif-v1.png"],
     ...(artworkPromptFor(105) ?? {}),
   },
   {
@@ -232,8 +232,8 @@ export const ROCK_CARDS: CardData[] = [
     songsOut: [107],
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.can-vitamine-c-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.can-vitamine-c-v1.png"],
+    artwork: `${ART}can-vitamine-c-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["can-vitamine-c-v1.png"],
     artworkOffsetY: -25,
     ...(artworkPromptFor(106) ?? {}),
   },
@@ -247,8 +247,8 @@ export const ROCK_CARDS: CardData[] = [
     abilityDesc: "Shipped catalogue entry.",
     pop: 8,
     rarity: "CLASSIC",
-    artwork: `${ART}artwork.gary-jules-mad-world-v1.png`,
-    artworkCreatedAt: ARTWORK_CREATED_AT["artwork.gary-jules-mad-world-v1.png"],
+    artwork: `${ART}gary-jules-mad-world-v1.png`,
+    artworkCreatedAt: ARTWORK_CREATED_AT["gary-jules-mad-world-v1.png"],
     ...(artworkPromptFor(110) ?? {}),
   },
 ] as CardData[];
